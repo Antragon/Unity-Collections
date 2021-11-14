@@ -1,5 +1,6 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
     using System.Collections;
+    using Components;
     using UnityEngine;
 
     public abstract class LocalizableComponent : MonoBehaviour {
@@ -14,6 +15,7 @@
         }
 
         protected void OnDisable() {
+            if (GameControl.ApplicationIsQuitting) return;
             LocalizationManager.Self.OnLocalizationChanged.RemoveListener(OnLocalizationChanged);
         }
 
