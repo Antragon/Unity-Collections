@@ -5,7 +5,7 @@
     public static class FromComponentInChildrenExtensions {
         public static void SetFieldFromComponentInChildren(this Component instance, FieldInfo field) {
             var component = instance.GetComponentInChildren(field.FieldType);
-            field.SetValue(instance, component);
+            instance.SetComponentValue(field, component);
         }
 
         public static void SetFieldFromComponentsInChildren(this Component instance, FieldInfo field) {
@@ -18,7 +18,7 @@
 
         private static void SetFieldFromComponentsInChildrenGeneric<TComponent>(Component instance, FieldInfo field) {
             var components = instance.GetComponentsInChildren<TComponent>();
-            field.SetValue(instance, components);
+            instance.SetComponentValue(field, components);
         }
     }
 }

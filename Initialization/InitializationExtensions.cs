@@ -30,7 +30,7 @@
 
         private static void SetFieldFromComponentInParent(this Component instance, FieldInfo field) {
             var component = instance.GetComponentInParent(field.FieldType);
-            field.SetValue(instance, component);
+            instance.SetComponentValue(field, component);
         }
 
         private static bool MustNotBeNull(FieldInfo fieldInfo) {
