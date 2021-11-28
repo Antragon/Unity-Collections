@@ -27,5 +27,11 @@
             position.y = y;
             transform.position = position;
         }
+
+        public static void SetZRotation(this Transform transform, float z) {
+            var angles = transform.rotation.eulerAngles;
+            angles.z = z;
+            transform.rotation = Quaternion.Euler(angles);
+        }
     }
 }
