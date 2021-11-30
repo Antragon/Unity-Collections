@@ -15,6 +15,12 @@
             return this;
         }
 
+        public ObservableValue<T> AddAndInvokeListener(Action<T> action) {
+            _observableProperty.AddListener(action);
+            action(Value);
+            return this;
+        }
+
         public ObservableValue<T> ListenOnce(Action<T> action) {
             _observableProperty.ListenOnce(action);
             return this;
