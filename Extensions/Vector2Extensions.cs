@@ -7,5 +7,10 @@
             var clampY = Mathf.Clamp(value.y, min.y, max.y);
             return new Vector2(clampX, clampY);
         }
+
+        public static bool IsOrthogonal(this Vector2 value) {
+            var orthogonal = value.x == 0 || value.y == 0;
+            return orthogonal;
+        }
     }
 }
