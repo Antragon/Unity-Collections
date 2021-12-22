@@ -23,11 +23,11 @@
                 .Cast<DataRow>()
                 .ToDictionary(
                     row => (string)row["key"],
-                    row => Languages.All
+                    row => LocalizationManager.Self.Languages
+                        .Select(language => language.ToString())
                         .Select(language => new Tuple<string, string>(language, (string)row[language]))
                         .Where(tuple => !string.IsNullOrEmpty(tuple.Item2))
-                        .ToDictionary(tuple => tuple.Item1, tuple => tuple.Item2.Replace("\\n", "\n")),
-                    StringComparer.InvariantCultureIgnoreCase);
+                        .ToDictionary(tuple => tuple.Item1, tuple => tuple.Item2.Replace("\\n", "\n")));
             return textAssetAsDictionary;
         }
 
@@ -50,7 +50,7 @@
                 return false;
             }
 
-            var language = Languages.GetCurrentLanguage();
+            var language = LocalizationManager.Self.CurrentLanguage.ToString();
             if (!localizedValues.TryGetValue(language, out localizedValue)) {
                 message = $"{language} localization not found for {path}.{valueKey}";
                 return false;

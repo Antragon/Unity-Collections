@@ -6,8 +6,9 @@
     public class TextProLocalization : LocalizableComponent {
         [FormerlySerializedAs("localizableString")] [SerializeField] private LocalizableString _localizableString;
 
+        [SerializeField] private TMP_Text _text;
+
         private ILocalizableValue _localizableValue;
-        private TMP_Text _text;
 
         public ILocalizableValue LocalizableValue {
             get => _localizableValue ??= _localizableString;
@@ -19,7 +20,7 @@
 
         protected override void OnLocalizationChanged() {
             if (!_text) {
-                _text = GetComponent<TMP_Text>();
+                _text = GetComponentInChildren<TMP_Text>();
             }
 
             _text.text = LocalizableValue.GetLocalizedValue();
