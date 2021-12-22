@@ -4,13 +4,16 @@
 
     [Serializable]
     public class LocalizableString : ILocalizableValue {
-        public LocalizationPath path;
-        public string valueKey;
+        public LocalizableString(string path, string valueKey) {
+            Path = path;
+            ValueKey = valueKey;
+        }
 
-        public string ValueKey => valueKey;
+        [field: SerializeField] public string Path { get; set; }
+        [field: SerializeField] public string ValueKey { get; set; }
 
         public string GetLocalizedValue() {
-            if (!LocalizationRepository.Self.TryGetLocalizedValue(new ValueLocalization(path, valueKey), out var localizedValue, out var message)) {
+            if (!LocalizationRepository.Self.TryGetLocalizedValue(new ValueLocalization(Path, ValueKey), out var localizedValue, out var message)) {
                 Debug.LogWarning(message);
                 return DefaultValue();
             }
@@ -18,6 +21,6 @@
             return localizedValue;
         }
 
-        private string DefaultValue() => $"{path}.{valueKey}";
+        private string DefaultValue() => $"{Path}.{ValueKey}";
     }
 }

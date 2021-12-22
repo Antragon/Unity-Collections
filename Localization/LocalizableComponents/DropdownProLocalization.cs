@@ -1,29 +1,30 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
     using System.Collections.Generic;
     using System.Linq;
+    using Initialization;
     using TMPro;
     using UnityEngine;
+    using UnityEngine.Serialization;
 
-    [RequireComponent(typeof(TMP_Dropdown))]
     public class DropdownProLocalization : LocalizableComponent {
+        [FormerlySerializedAs("localizableStrings")] [SerializeField] private List<LocalizableString> _localizableStrings;
+
         private IEnumerable<ILocalizableValue> _localizableValues;
         private TMP_Dropdown _dropdown;
 
-        [SerializeField] private List<LocalizableString> localizableStrings;
-
         public IEnumerable<ILocalizableValue> LocalizableValues {
-            get => _localizableValues ??= localizableStrings;
+            get => _localizableValues ??= _localizableStrings;
             set {
                 _localizableValues = value;
                 OnLocalizationChanged();
             }
         }
 
-        private void Awake() {
-            _dropdown = GetComponent<TMP_Dropdown>();
-        }
-
         protected override void OnLocalizationChanged() {
+            if (!_dropdown) {
+                _dropdown = GetComponent<TMP_Dropdown>();
+            }
+
             var dropdownOptions = LocalizableValues
                 .Select(x => x.GetLocalizedValue())
                 .Select(x => new TMP_Dropdown.OptionData(x))

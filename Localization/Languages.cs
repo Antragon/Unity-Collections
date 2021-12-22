@@ -1,5 +1,6 @@
 ﻿namespace Collections.Localization {
     using System.Collections.Generic;
+    using System.Globalization;
     using UnityEngine;
 
     public static class Languages {

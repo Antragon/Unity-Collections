@@ -1,25 +1,25 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
     using TMPro;
     using UnityEngine;
+    using UnityEngine.Serialization;
 
-    [RequireComponent(typeof(TextMeshProUGUI))]
     public class TextProLocalization : LocalizableComponent {
-        [SerializeField] private LocalizableString localizableString;
+        [FormerlySerializedAs("localizableString")] [SerializeField] private LocalizableString _localizableString;
+
+        private ILocalizableValue _localizableValue;
+        private TMP_Text _text;
 
         public ILocalizableValue LocalizableValue {
-            get => _localizableValue ??= localizableString;
+            get => _localizableValue ??= _localizableString;
             set {
                 _localizableValue = value;
                 OnLocalizationChanged();
             }
         }
 
-        private ILocalizableValue _localizableValue;
-        private TextMeshProUGUI _text;
-
         protected override void OnLocalizationChanged() {
             if (!_text) {
-                _text = GetComponent<TextMeshProUGUI>();
+                _text = GetComponent<TMP_Text>();
             }
 
             _text.text = LocalizableValue.GetLocalizedValue();

@@ -1,11 +1,11 @@
 ﻿namespace Collections.Localization {
     public class UnlocalizedValue : ILocalizableValue {
-        public string ValueKey { get; }
+        private readonly string _value;
 
         public UnlocalizedValue(string value) {
-            ValueKey = value;
+            _value = value;
         }
 
-        public string GetLocalizedValue() => ValueKey;
+        public string GetLocalizedValue() => _value;
     }
 }

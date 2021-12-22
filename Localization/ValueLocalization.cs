@@ -4,10 +4,10 @@
 
     [Serializable]
     public readonly struct ValueLocalization {
-        public LocalizationPath Path { get; }
+        public string Path { get; }
         public string ValueKey { get; }
 
-        public ValueLocalization(LocalizationPath path, string valueKey) {
+        public ValueLocalization(string path, string valueKey) {
             Path = path;
             ValueKey = valueKey;
         }

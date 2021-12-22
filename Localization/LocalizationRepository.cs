@@ -4,23 +4,15 @@
     using System.Data;
     using System.Linq;
     using Components;
-    using Enums;
     using UnityEngine;
 
     public class LocalizationRepository : SingletonComponent<LocalizationRepository> {
-        [SerializeField] private TextAsset _guiTexts;
-        [SerializeField] private TextAsset _hotKeys;
-        [SerializeField] private TextAsset _keys;
-        [SerializeField] private TextAsset _tooltips;
+        private Dictionary<string, Dictionary<string, Dictionary<string, string>>> _texts;
 
-        private readonly Dictionary<LocalizationPath, Dictionary<string, Dictionary<string, string>>> _texts =
-            new Dictionary<LocalizationPath, Dictionary<string, Dictionary<string, string>>>();
+        [SerializeField] private TextAsset[] _textAssets;
 
         protected override void AwakeExtended() {
-            _texts.Add(LocalizationPath.Gui, ReadTextAsset(_guiTexts));
-            _texts.Add(LocalizationPath.Hotkeys, ReadTextAsset(_hotKeys));
-            _texts.Add(LocalizationPath.Keys, ReadTextAsset(_keys));
-            _texts.Add(LocalizationPath.Tooltips, ReadTextAsset(_tooltips));
+            _texts = _textAssets.ToDictionary(x => x.name, ReadTextAsset);
         }
 
         private static Dictionary<string, Dictionary<string, string>> ReadTextAsset(TextAsset textAsset) {
@@ -30,9 +22,9 @@
             var textAssetAsDictionary = textTable.Rows
                 .Cast<DataRow>()
                 .ToDictionary(
-                    row => (string) row["key"],
+                    row => (string)row["key"],
                     row => Languages.All
-                        .Select(language => new Tuple<string, string>(language, (string) row[language]))
+                        .Select(language => new Tuple<string, string>(language, (string)row[language]))
                         .Where(tuple => !string.IsNullOrEmpty(tuple.Item2))
                         .ToDictionary(tuple => tuple.Item1, tuple => tuple.Item2.Replace("\\n", "\n")),
                     StringComparer.InvariantCultureIgnoreCase);

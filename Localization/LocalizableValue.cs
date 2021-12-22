@@ -3,8 +3,6 @@
         private readonly ILocalizableValue _value;
         private readonly ILocalizableValue[] _parameters;
 
-        public string ValueKey => _value.ValueKey;
-
         public LocalizableValue(ILocalizableValue value, params ILocalizableValue[] parameters) {
             _value = value;
             _parameters = parameters;

@@ -1,11 +1,12 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
     using UnityEngine;
+    using UnityEngine.Serialization;
     using UnityEngine.UI;
 
     public class TextLocalization : LocalizableComponent {
-        [SerializeField] private LocalizableString localizableString;
+        [FormerlySerializedAs("localizableString")] [SerializeField] private LocalizableString _localizableString;
 
-        public ILocalizableValue LocalizableValue => _localizableValue ??= localizableString;
+        public ILocalizableValue LocalizableValue => _localizableValue ??= _localizableString;
 
         private ILocalizableValue _localizableValue;
         private Text _text;
