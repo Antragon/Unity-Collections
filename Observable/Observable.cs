@@ -13,6 +13,12 @@
             return this;
         }
 
+        public Observable AddAndInvokeListener(Action action) {
+            _observableAction.AddListener(action);
+            action();
+            return this;
+        }
+
         public Observable ListenOnce(Action action) {
             _observableAction.ListenOnce(action);
             return this;
