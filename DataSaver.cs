@@ -40,12 +40,16 @@
         }
 
         public static bool TryLoadJson<T>(string loadPath, out T @object) {
+            @object = default;
+
             try {
                 @object = LoadJson<T>(loadPath);
                 return @object != null;
+            } catch (FileNotFoundException) {
+                InfoLogger.Self.WriteWarning($"File not found: {loadPath}");
+                return false;
             } catch (Exception exception) {
                 InfoLogger.Self.WriteError($"Could not Load file {loadPath}", exception);
-                @object = default;
                 return false;
             }
         }
