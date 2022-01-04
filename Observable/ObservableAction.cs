@@ -24,8 +24,9 @@
         }
 
         public void Invoke(T value) {
+            var oneTimeListeners = _oneTimeListeners.ToArray();
             _onEvent?.Invoke(value);
-            foreach (var action in _oneTimeListeners.ToArray()) {
+            foreach (var action in oneTimeListeners) {
                 _onEvent -= action;
                 _oneTimeListeners.Remove(action);
             }
