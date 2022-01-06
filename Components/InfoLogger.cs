@@ -2,6 +2,7 @@
     using System;
     using UnityEngine;
 
+#line hidden
     public class InfoLogger : SingletonComponent<InfoLogger> {
         public void WriteInfo(string message) {
             Debug.Log(message);
@@ -18,4 +19,5 @@
             }
         }
     }
+#line default
 }

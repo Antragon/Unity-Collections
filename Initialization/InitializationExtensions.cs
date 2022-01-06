@@ -7,6 +7,7 @@
     using UnityEngine;
     using Object = UnityEngine.Object;
 
+#line hidden
     public static class InitializationExtensions {
         private static readonly Type _monoBehaviourType = typeof(MonoBehaviour);
 
@@ -54,4 +55,5 @@
             return Attribute.IsDefined(memberInfo, typeof(T));
         }
     }
+#line default
 }
