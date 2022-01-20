@@ -1,6 +1,5 @@
 ﻿namespace Collections.Localization {
     using System;
-    using Enums;
 
     [Serializable]
     public readonly struct ValueLocalization {

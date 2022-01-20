@@ -2,7 +2,7 @@ namespace Collections {
     using UnityEngine;
 
     public static class Functions {
-        public static bool TryDestroyAndMarkAsDestroyed(GameObject objectToDestroy) {
+        public static bool TryDestroyAndMarkAsDestroyed(this GameObject objectToDestroy) {
             if (objectToDestroy.IsDestroyed()) return false;
 
             objectToDestroy.tag = Tags.Destroyed;

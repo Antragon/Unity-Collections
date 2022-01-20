@@ -1,7 +1,6 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
     using System.Collections.Generic;
     using System.Linq;
-    using Initialization;
     using UnityEngine;
     using UnityEngine.UI;
 

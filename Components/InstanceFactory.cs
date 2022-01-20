@@ -14,7 +14,7 @@
 
         public void Clear() {
             foreach (var instance in _instancePrefabs.Keys) {
-                Functions.TryDestroyAndMarkAsDestroyed(instance);
+                instance.TryDestroyAndMarkAsDestroyed();
             }
 
             _instancePrefabs.Clear();
