@@ -25,7 +25,7 @@ namespace Collections.Components {
         }
 
         private static void DestroyAndLog(GameObject objectToDestroy) {
-            if (Functions.TryDestroyAndMarkAsDestroyed(objectToDestroy)) {
+            if (objectToDestroy.TryDestroyAndMarkAsDestroyed()) {
                 Debug.Log($"Destroyed {objectToDestroy.name} due to duplicated singletons ({typeof(T)})");
             }
         }
