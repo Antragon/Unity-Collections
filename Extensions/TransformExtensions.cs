@@ -33,5 +33,14 @@
             angles.z = z;
             transform.rotation = Quaternion.Euler(angles);
         }
+
+        public static void SetLocalScale2D(this Transform transform, Vector2 scale) {
+            transform.SetLocalScale2D(scale.x, scale.y);
+        }
+
+        public static void SetLocalScale2D(this Transform transform, float x, float y) {
+            var scale = new Vector3(x, y, transform.localScale.z);
+            transform.localScale = scale;
+        }
     }
 }
