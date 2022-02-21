@@ -1,15 +1,15 @@
 ﻿namespace Collections.Components {
     using System.Globalization;
     using System.Linq;
+    using Initialization;
     using Observable;
     using UnityEngine;
     using UnityEngine.UI;
 
-    [RequireComponent(typeof(InputField))]
     public class DecimalInputField : MonoBehaviour {
         private readonly ObservableAction<float> _onEditingEnded = new ObservableAction<float>();
 
-        private InputField _inputField;
+        [FromComponent] private InputField _inputField;
 
         [SerializeField] private float _minimum;
         [SerializeField] private float _maximum;
@@ -23,7 +23,7 @@
         public Observable<float> OnEditingEnded => _onEditingEnded.ToObservable();
 
         private void Awake() {
-            _inputField = GetComponent<InputField>();
+            this.Initialize();
             _inputField.contentType = InputField.ContentType.DecimalNumber;
             _inputField.onValueChanged.AddListener(OnValueChanged);
             _inputField.onEndEdit.AddListener(OnEndEdit);
