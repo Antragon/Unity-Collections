@@ -8,6 +8,7 @@
 
     public class DecimalInputField : MonoBehaviour {
         private readonly ObservableAction<float> _onEditingEnded = new ObservableAction<float>();
+        private readonly ObservableAction<float> _onValueChanged = new ObservableAction<float>();
 
         [FromComponent] private InputField _inputField;
 
@@ -21,19 +22,21 @@
         }
 
         public Observable<float> OnEditingEnded => _onEditingEnded.ToObservable();
+        public Observable<float> OnValueChanged => _onValueChanged.ToObservable();
 
         private void Awake() {
             this.Initialize();
             _inputField.contentType = InputField.ContentType.DecimalNumber;
-            _inputField.onValueChanged.AddListener(OnValueChanged);
+            _inputField.onValueChanged.AddListener(OnValueChanging);
             _inputField.onEndEdit.AddListener(OnEndEdit);
         }
 
-        private void OnValueChanged(string value) {
+        private void OnValueChanging(string value) {
             if (!char.IsDigit(value.LastOrDefault()) || !float.TryParse(value, out var valueAsFloat)) return;
             valueAsFloat = Mathf.Clamp(valueAsFloat, _minimum, _maximum);
             valueAsFloat = Mathf.Floor(valueAsFloat * DecimalPlacesConversionValue) / DecimalPlacesConversionValue;
             Text = valueAsFloat.ToString(CultureInfo.CurrentCulture);
+            _onValueChanged.Invoke(valueAsFloat);
         }
 
         private int DecimalPlacesConversionValue => (int)Mathf.Pow(10, _decimalPlaces);
