@@ -16,9 +16,9 @@
         [SerializeField] private float _maximum;
         [SerializeField, Range(0, 10)] private int _decimalPlaces = 1;
 
-        public string Text {
-            get => _inputField.text;
-            set => _inputField.text = value;
+        public float Value {
+            get => float.Parse(_inputField.text);
+            set => _inputField.text = value.ToString(CultureInfo.CurrentCulture);
         }
 
         public Observable<float> OnEditingEnded => _onEditingEnded.ToObservable();
@@ -35,7 +35,7 @@
             if (!char.IsDigit(value.LastOrDefault()) || !float.TryParse(value, out var valueAsFloat)) return;
             valueAsFloat = Mathf.Clamp(valueAsFloat, _minimum, _maximum);
             valueAsFloat = Mathf.Floor(valueAsFloat * DecimalPlacesConversionValue) / DecimalPlacesConversionValue;
-            Text = valueAsFloat.ToString(CultureInfo.CurrentCulture);
+            Value = valueAsFloat;
             _onValueChanged.Invoke(valueAsFloat);
         }
 
