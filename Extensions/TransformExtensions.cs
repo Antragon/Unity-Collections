@@ -16,6 +16,11 @@
             }
         }
 
+        public static void SetPosition2D(this Transform transform, Vector2 position2D) {
+            var position = new Vector3(position2D.x, position2D.y, transform.position.z);
+            transform.position = position;
+        }
+
         public static void SetXPosition(this Transform transform, float x) {
             var position = transform.position;
             position.x = x;
