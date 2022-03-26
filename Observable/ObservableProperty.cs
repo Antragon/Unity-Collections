@@ -33,6 +33,10 @@
             _onValueChanged.Invoke(_value);
         }
 
+        public void SetSilently(T value) {
+            _value = value;
+        }
+
         public ObservableProperty<T> AddListener(Action<T> onValueChanged) {
             _onValueChanged.AddListener(onValueChanged);
             return this;
