@@ -19,17 +19,8 @@
         }
 
         public static IEnumerator SmoothLerpTowards(this Transform transform, Vector2 target, float speed, Func<bool> breakCondition = null) {
-            var time = 0f;
             var start = (Vector2)transform.position;
-            while (time < 1) {
-                if (breakCondition?.Invoke() ?? false) yield break;
-                time += speed * Time.deltaTime;
-                var position = Vector2.Lerp(start, target, Mathf.SmoothStep(0, 1, time));
-                transform.SetPosition2D(position);
-                yield return null;
-            }
-
-            transform.SetPosition2D(target);
+            yield return start.SmoothLerpTowards(target, speed, transform.SetPosition2D, breakCondition);
         }
 
         public static void SetPosition2D(this Transform transform, Vector2 position2D) {
