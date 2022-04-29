@@ -1,10 +1,15 @@
 ﻿namespace Collections.Initialization {
     using System.Reflection;
+    using Components;
     using UnityEngine;
 
     public static class FromComponentExtensions {
         public static void SetFieldFromComponent(this Component instance, FieldInfo field) {
-            var component = instance.GetComponent(field.FieldType);
+            var attribute = field.GetCustomAttribute<FromComponentAttribute>();
+            var componentProvider = string.IsNullOrEmpty(attribute.SingletonTag) ?
+                instance :
+                SingletonMarker.GetInstance(attribute.SingletonTag).transform;
+            var component = componentProvider.GetComponent(field.FieldType);
             instance.SetComponentValue(field, component);
         }
 
