@@ -28,11 +28,6 @@
             transform.position = position;
         }
 
-        public static void SetLocalPosition2D(this Transform transform, Vector2 position2D) {
-            var position = new Vector3(position2D.x, position2D.y, transform.localPosition.z);
-            transform.localPosition = position;
-        }
-
         public static void SetXPosition(this Transform transform, float x) {
             var position = transform.position;
             position.x = x;
@@ -49,6 +44,23 @@
             var angles = transform.rotation.eulerAngles;
             angles.z = z;
             transform.rotation = Quaternion.Euler(angles);
+        }
+
+        public static void SetLocalPosition2D(this Transform transform, Vector2 position2D) {
+            var position = new Vector3(position2D.x, position2D.y, transform.localPosition.z);
+            transform.localPosition = position;
+        }
+
+        public static void SetLocalXPosition(this Transform transform, float x) {
+            var position = transform.localPosition;
+            position.x = x;
+            transform.localPosition = position;
+        }
+
+        public static void SetLocalYPosition(this Transform transform, float y) {
+            var position = transform.localPosition;
+            position.y = y;
+            transform.localPosition = position;
         }
 
         public static void SetLocalScale2D(this Transform transform, Vector2 scale) {
