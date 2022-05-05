@@ -30,5 +30,9 @@
             _observableProperty.RemoveListener(action);
             return this;
         }
+
+        public override string ToString() {
+            return $"<{nameof(ObservableValue<T>)}>{Value}";
+        }
     }
 }

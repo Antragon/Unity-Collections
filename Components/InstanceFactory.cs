@@ -33,10 +33,14 @@
         }
 
         public GameObject CreateInstance(GameObject prefab, Transform parent = null, Vector2 position = default, Quaternion rotation = default) {
+            return CreateInstance(prefab, prefab.name, parent, position, rotation);
+        }
+
+        public GameObject CreateInstance(GameObject prefab, string instanceName, Transform parent = null, Vector2 position = default, Quaternion rotation = default) {
             var instance = GetStoredInstance(prefab);
             if (!instance) {
                 instance = Instantiate(prefab, parent);
-                instance.name = prefab.name;
+                instance.name = instanceName;
                 _instancePrefabs.Add(instance, prefab);
             }
 
