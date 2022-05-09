@@ -40,10 +40,10 @@
             var instance = GetStoredInstance(prefab);
             if (!instance) {
                 instance = Instantiate(prefab, parent);
-                instance.name = instanceName;
                 _instancePrefabs.Add(instance, prefab);
             }
 
+            instance.name = instanceName;
             instance.transform.SetParent(parent);
             instance.transform.localPosition = position;
             instance.transform.rotation = rotation;
