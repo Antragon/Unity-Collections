@@ -6,10 +6,11 @@
     public class TextLocalization : LocalizableComponent {
         [FormerlySerializedAs("localizableString")] [SerializeField] private LocalizableString _localizableString;
 
-        public ILocalizableValue LocalizableValue => _localizableValue ??= _localizableString;
+        private Text _text;
 
         private ILocalizableValue _localizableValue;
-        private Text _text;
+
+        public ILocalizableValue LocalizableValue => _localizableValue ??= _localizableString;
 
         protected override void OnLocalizationChanged() {
             if (!_text) {
