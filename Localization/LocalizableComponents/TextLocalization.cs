@@ -10,7 +10,15 @@
 
         private ILocalizableValue _localizableValue;
 
-        public ILocalizableValue LocalizableValue => _localizableValue ??= _localizableString;
+        public ILocalizableValue LocalizableValue {
+            get => _localizableValue ??= _localizableString;
+            set => SetLocalizableValue(value);
+        }
+
+        private void SetLocalizableValue(ILocalizableValue value) {
+            _localizableValue = value;
+            OnLocalizationChanged();
+        }
 
         protected override void OnLocalizationChanged() {
             if (!_text) {

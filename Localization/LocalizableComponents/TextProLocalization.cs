@@ -12,10 +12,12 @@
 
         public ILocalizableValue LocalizableValue {
             get => _localizableValue ??= _localizableString;
-            set {
-                _localizableValue = value;
-                OnLocalizationChanged();
-            }
+            set => SetLocalizableValue(value);
+        }
+
+        private void SetLocalizableValue(ILocalizableValue value) {
+            _localizableValue = value;
+            OnLocalizationChanged();
         }
 
         protected override void OnLocalizationChanged() {
