@@ -1,4 +1,6 @@
-﻿namespace Collections.Localization.LocalizableComponents.Editor {
+﻿namespace Collections.Editor.Localization {
+    using Collections.Localization;
+    using Collections.Localization.LocalizableComponents;
     using UnityEditor;
     using UnityEngine;
 
