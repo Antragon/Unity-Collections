@@ -3,9 +3,9 @@
     using UnityEngine;
 
     [Serializable]
-    public struct NullableFloatWrapper {
-        [field: SerializeField] public float Value { get; private set; }
-        [field: SerializeField] public bool HasValue { get; private set; }
+    public struct NullableFloatWrapper : INullableWrapper<float> {
+        [field: SerializeField] public float Value { get; set; }
+        [field: SerializeField] public bool HasValue { get; set; }
 
         public static implicit operator float?(NullableFloatWrapper wrapper) {
             if (!wrapper.HasValue) {
