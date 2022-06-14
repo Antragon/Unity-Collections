@@ -71,5 +71,17 @@
             var scale = new Vector3(x, y, transform.localScale.z);
             transform.localScale = scale;
         }
+
+        public static void SetLocalXScale(this Transform transform, float x) {
+            var scale = transform.localScale;
+            scale.x = x;
+            transform.localScale = scale;
+        }
+
+        public static void SetLocalYScale(this Transform transform, float y) {
+            var scale = transform.localScale;
+            scale.y = y;
+            transform.localScale = scale;
+        }
     }
 }
