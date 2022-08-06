@@ -8,7 +8,7 @@
     public class LocalizationManager : SingletonComponent<LocalizationManager> {
         private static string LocalizationSavePath => $"{Application.persistentDataPath}/language.json";
 
-        private readonly ObservableAction _onLocalizationChanged = new ObservableAction();
+        private readonly ObservableAction _onLocalizationChanged = new();
 
         [SerializeField] private SystemLanguage _defaultLanguage;
 

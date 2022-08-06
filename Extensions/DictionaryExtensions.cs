@@ -5,15 +5,6 @@
     using Object = UnityEngine.Object;
 
     public static class DictionaryExtensions {
-        public static bool TryAdd<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value) {
-            if (!dict.ContainsKey(key)) {
-                dict.Add(key, value);
-                return true;
-            }
-
-            return false;
-        }
-
         public static bool TryAdd<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, Func<TValue> value) {
             if (!dict.ContainsKey(key)) {
                 dict.Add(key, value());

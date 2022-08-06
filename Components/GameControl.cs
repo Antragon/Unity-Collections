@@ -8,7 +8,7 @@
 
         public static bool ApplicationIsQuitting { get; private set; }
 
-        private readonly ObservableProperty<bool> _overlayIsActive = new ObservableProperty<bool>();
+        private readonly ObservableProperty<bool> _overlayIsActive = new();
 
         [SerializeField] private bool _applySlowMotionToPhysics;
 

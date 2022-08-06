@@ -7,8 +7,8 @@
     using UnityEngine.UI;
 
     public class DecimalInputField : MonoBehaviour {
-        private readonly ObservableAction<float> _onEditingEnded = new ObservableAction<float>();
-        private readonly ObservableAction<float> _onValueChanged = new ObservableAction<float>();
+        private readonly ObservableAction<float> _onEditingEnded = new();
+        private readonly ObservableAction<float> _onValueChanged = new();
 
         [FromComponent] private InputField _inputField;
 

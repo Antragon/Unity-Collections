@@ -1,12 +1,11 @@
 ﻿namespace Collections.Components {
     using System.Collections.Generic;
     using System.Linq;
-    using Extensions;
     using UnityEngine;
 
     public class InstanceFactory : MonoBehaviour {
-        private readonly Dictionary<GameObject, Object> _instancePrefabs = new Dictionary<GameObject, Object>();
-        private readonly Dictionary<Object, HashSet<GameObject>> _instanceStorage = new Dictionary<Object, HashSet<GameObject>>();
+        private readonly Dictionary<GameObject, Object> _instancePrefabs = new();
+        private readonly Dictionary<Object, HashSet<GameObject>> _instanceStorage = new();
 
         private void OnDestroy() {
             Clear();

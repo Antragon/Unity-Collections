@@ -5,7 +5,7 @@
     using Components;
 
     public static class Analyzer {
-        private static readonly Dictionary<string, Stopwatch> _measurements = new Dictionary<string, Stopwatch>();
+        private static readonly Dictionary<string, Stopwatch> _measurements = new();
 
         public static T ExecuteAndMeasureTime<T>(Func<T> funcToExecute, long debugLimitInMilliseconds = 1000) {
             var stopwatch = new Stopwatch();

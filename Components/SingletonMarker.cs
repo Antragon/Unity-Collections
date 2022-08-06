@@ -5,7 +5,7 @@
 
     [DisallowMultipleComponent]
     public class SingletonMarker : MonoBehaviour {
-        private static readonly Dictionary<string, GameObject> _instances = new Dictionary<string, GameObject>();
+        private static readonly Dictionary<string, GameObject> _instances = new();
 
         public static GameObject GetInstance(string tag) {
             var instance = _instances.ContainsKey(tag) ? _instances[tag] : FindInstance(tag);

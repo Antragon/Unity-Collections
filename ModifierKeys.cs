@@ -4,7 +4,7 @@
     using UnityEngine;
 
     public static class ModifierKeys {
-        public static readonly List<KeyCode> Keys = new List<KeyCode> {
+        public static readonly List<KeyCode> Keys = new() {
             KeyCode.LeftAlt,
             KeyCode.LeftControl,
             KeyCode.LeftShift,

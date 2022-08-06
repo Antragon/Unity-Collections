@@ -3,7 +3,7 @@
     using System.Collections.Generic;
 
     public class ObservableAction<T> {
-        private readonly List<Action<T>> _oneTimeListeners = new List<Action<T>>();
+        private readonly List<Action<T>> _oneTimeListeners = new();
 
         private Action<T> _onEvent;
 
@@ -34,7 +34,7 @@
     }
 
     public class ObservableAction {
-        private readonly List<Action> _oneTimeListeners = new List<Action>();
+        private readonly List<Action> _oneTimeListeners = new();
 
         private Action _onEvent;
 

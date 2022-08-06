@@ -3,7 +3,7 @@
 
     [Serializable]
     public class ObservableProperty<T> {
-        private readonly ObservableAction<T> _onValueChanged = new ObservableAction<T>();
+        private readonly ObservableAction<T> _onValueChanged = new();
 
         private T _value;
 
