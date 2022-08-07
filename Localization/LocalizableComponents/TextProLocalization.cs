@@ -3,7 +3,7 @@
     using UnityEngine;
     using UnityEngine.Serialization;
 
-    public class TextProLocalization : LocalizableComponent {
+    public class TextProLocalization : LocalizableComponent, ITextLocalization {
         [FormerlySerializedAs("localizableString")] [SerializeField] private LocalizableString _localizableString;
 
         [SerializeField] private TMP_Text _text;

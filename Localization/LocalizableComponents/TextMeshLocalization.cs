@@ -1,7 +1,7 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
     using UnityEngine;
 
-    public class TextMeshLocalization : LocalizableComponent {
+    public class TextMeshLocalization : LocalizableComponent, ITextLocalization {
         [SerializeField] private LocalizableString _localizableString;
 
         private TextMesh _textMesh;
