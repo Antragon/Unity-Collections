@@ -23,5 +23,12 @@
             var size = rightUpper - leftLower;
             return size;
         }
+
+        public static bool Contains2D(this Bounds bounds, Vector2 point) {
+            var center = (Vector2)bounds.center;
+            var size = (Vector2)bounds.size;
+            var correctedBounds = new Bounds(center, size);
+            return correctedBounds.Contains(point);
+        }
     }
 }
