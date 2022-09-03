@@ -54,13 +54,13 @@
                 return null;
             }
 
-            var tile = instances.FirstOrDefault();
-            instances.Remove(tile);
-            if (tile) {
-                tile.SetActive(true);
+            var instance = instances.FirstOrDefault();
+            instances.Remove(instance);
+            if (instance) {
+                instance.SetActive(true);
             }
 
-            return tile;
+            return instance;
         }
     }
 }
