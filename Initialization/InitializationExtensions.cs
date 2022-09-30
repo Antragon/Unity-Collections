@@ -22,16 +22,12 @@
                 fields.Where(HasAttribute<FromComponentAttribute>).ForEach(instance.SetFieldFromComponent);
                 fields.Where(HasAttribute<FromComponentsAttribute>).ForEach(instance.SetFieldFromComponents);
                 fields.Where(HasAttribute<FromComponentInParentAttribute>).ForEach(instance.SetFieldFromComponentInParent);
+                fields.Where(HasAttribute<FromComponentsInParentAttribute>).ForEach(instance.SetFieldFromComponentsInParent);
                 fields.Where(HasAttribute<FromComponentInChildrenAttribute>).ForEach(instance.SetFieldFromComponentInChildren);
                 fields.Where(HasAttribute<FromComponentsInChildrenAttribute>).ForEach(instance.SetFieldFromComponentsInChildren);
                 fields.Where(MustNotBeNull).ForEach(instance.ValidateNotNull);
                 type = type.BaseType;
             }
-        }
-
-        private static void SetFieldFromComponentInParent(this Component instance, FieldInfo field) {
-            var component = instance.GetComponentInParent(field.FieldType);
-            instance.SetComponentValue(field, component);
         }
 
         private static bool MustNotBeNull(FieldInfo fieldInfo) {
