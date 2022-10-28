@@ -42,7 +42,11 @@
         private int DecimalPlacesConversionValue => (int)Mathf.Pow(10, _decimalPlaces);
 
         private void OnEndEdit(string value) {
-            float.TryParse(value, out var valueAsFloat);
+            if (!float.TryParse(value, out var valueAsFloat)) {
+                valueAsFloat = _minimum;
+                Value = _minimum;
+            }
+
             _onEditingEnded.Invoke(valueAsFloat);
         }
     }
