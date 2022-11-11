@@ -14,15 +14,19 @@
         }
 
         public static void SetFieldFromComponents(this Component instance, FieldInfo field) {
+            var attribute = field.GetCustomAttribute<FromComponentsAttribute>();
+            var componentProvider = string.IsNullOrEmpty(attribute.SingletonTag) ?
+                instance :
+                SingletonMarker.GetInstance(attribute.SingletonTag).transform;
             var elementType = field.FieldType.GetElementType();
             const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.NonPublic;
             var method = typeof(FromComponentExtensions).GetMethod(nameof(SetFieldFromComponentsGeneric), bindingFlags);
             var genericMethod = method!.MakeGenericMethod(elementType);
-            genericMethod.Invoke(null, new object[] { instance, field });
+            genericMethod.Invoke(null, new object[] { componentProvider, instance, field });
         }
 
-        private static void SetFieldFromComponentsGeneric<TComponent>(Component instance, FieldInfo field) {
-            var components = instance.GetComponents<TComponent>();
+        private static void SetFieldFromComponentsGeneric<TComponent>(Component componentProvider, Component instance, FieldInfo field) {
+            var components = componentProvider.GetComponents<TComponent>();
             instance.SetComponentValue(field, components);
         }
     }
