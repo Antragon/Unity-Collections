@@ -1,6 +1,7 @@
 ﻿namespace Collections.Components {
     using Observable;
     using UnityEngine;
+    using UnityEngine.InputSystem;
 
     public class GameControl : SingletonComponent<GameControl> {
         private const float _slowMoTimeScale = 0.1f;
@@ -33,12 +34,12 @@
         }
 
         private void UpdateSlowMotion() {
-            if (Input.GetKeyDown(KeyCode.Tab)) {
+            if (Keyboard.current[Key.Tab].wasPressedThisFrame) {
                 Time.timeScale = _slowMoTimeScale;
                 if (_applySlowMotionToPhysics) {
                     Time.fixedDeltaTime = _physicsTimeStep * _slowMoTimeScale;
                 }
-            } else if (Input.GetKeyUp(KeyCode.Tab)) {
+            } else if (Keyboard.current[Key.Tab].wasReleasedThisFrame) {
                 Time.timeScale = 1;
                 Time.fixedDeltaTime = _physicsTimeStep;
             }
@@ -56,7 +57,7 @@
         }
 
         private void UpdateOverlay() {
-            if (Input.GetKeyDown(KeyCode.H)) {
+            if (Keyboard.current[Key.H].wasPressedThisFrame) {
                 _overlayIsActive.Value = !_overlayIsActive.Value;
             }
         }
