@@ -58,10 +58,6 @@
             return this;
         }
 
-        public ObservableProperty<T> Clone() {
-            return new ObservableProperty<T>(Value);
-        }
-
         public override string ToString() {
             return $"<{nameof(ObservableProperty<T>)}>{Value}";
         }
