@@ -22,7 +22,7 @@
 
         public void Store(GameObject instance) {
             if (!_instancePrefabs.TryGetValue(instance, out var prefab)) {
-                InfoLogger.Self.WriteWarning($"Instance {instance} must be created by this factory to be stored here");
+                Debug.LogWarning($"Instance {instance} must be created by this factory to be stored here");
                 return;
             }
 

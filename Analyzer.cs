@@ -2,7 +2,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using Components;
+    using Debug = UnityEngine.Debug;
 
     public static class Analyzer {
         private static readonly Dictionary<string, Stopwatch> _measurements = new();
@@ -14,7 +14,7 @@
             stopwatch.Stop();
             var elapsed = stopwatch.ElapsedMilliseconds;
             if (elapsed > debugLimitInMilliseconds) {
-                InfoLogger.Self.WriteInfo($"Took {elapsed} ms: Executing {funcToExecute.Method.Name}");
+                Debug.Log($"Took {elapsed} ms: Executing {funcToExecute.Method.Name}");
             }
 
             return result;
@@ -27,7 +27,7 @@
             stopwatch.Stop();
             var elapsed = stopwatch.ElapsedMilliseconds;
             if (elapsed > debugLimitInMilliseconds) {
-                InfoLogger.Self.WriteInfo($"Took {elapsed} ms: Executing {actionToExecute.Method.Name}");
+                Debug.Log($"Took {elapsed} ms: Executing {actionToExecute.Method.Name}");
             }
         }
 
@@ -42,7 +42,7 @@
             stopwatch.Stop();
             var elapsed = stopwatch.ElapsedMilliseconds;
             if (elapsed > debugLimitInMilliseconds) {
-                InfoLogger.Self.WriteInfo($"Took {elapsed} ms: {activityDescription}");
+                Debug.Log($"Took {elapsed} ms: {activityDescription}");
             }
         }
     }

@@ -2,7 +2,6 @@
     using System;
     using System.Linq;
     using System.Reflection;
-    using Components;
     using MoreLinq;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -43,7 +42,7 @@
             if (value is Object @object && !@object ||
                 value is string @string && string.IsNullOrEmpty(@string) ||
                 value == null) {
-                InfoLogger.Self.WriteError($"{field.Name} must not be null");
+                Debug.LogError($"{field.Name} must not be null");
             }
         }
 
