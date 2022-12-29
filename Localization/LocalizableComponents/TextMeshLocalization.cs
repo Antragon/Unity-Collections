@@ -1,10 +1,14 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
+    using Components;
+    using Initialization;
     using UnityEngine;
 
     public class TextMeshLocalization : LocalizableComponent, ITextLocalization {
+        [FromComponent(SingletonTag = GameControl.Tag)] private readonly LocalizationRepository _localizationRepository;
+
         [SerializeField] private LocalizableString _localizableString;
 
-        private TextMesh _textMesh;
+        [FromComponentInChildren, SerializeField] private TextMesh _textMesh;
 
         private ILocalizableValue _localizableValue;
 
@@ -19,11 +23,8 @@
         }
 
         protected override void OnLocalizationChanged() {
-            if (!_textMesh) {
-                _textMesh = GetComponentInChildren<TextMesh>();
-            }
-
-            _textMesh.text = LocalizableValue.GetLocalizedValue();
+            InitializeOnce();
+            _textMesh.text = LocalizableValue.GetLocalizedValue(_localizationRepository);
         }
     }
 }

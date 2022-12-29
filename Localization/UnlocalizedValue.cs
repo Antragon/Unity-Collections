@@ -6,6 +6,6 @@
             _value = value;
         }
 
-        public string GetLocalizedValue() => _value;
+        public string GetLocalizedValue(LocalizationRepository localizationRepository) => _value;
     }
 }

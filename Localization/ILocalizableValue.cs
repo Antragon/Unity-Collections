@@ -1,5 +1,5 @@
 ﻿namespace Collections.Localization {
     public interface ILocalizableValue {
-        string GetLocalizedValue();
+        string GetLocalizedValue(LocalizationRepository localizationRepository);
     }
 }

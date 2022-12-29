@@ -1,11 +1,10 @@
 ﻿namespace Collections.Localization {
     using System.Linq;
-    using Components;
     using JetBrains.Annotations;
     using Observable;
     using UnityEngine;
 
-    public class LocalizationManager : SingletonComponent<LocalizationManager> {
+    public class LocalizationManager : MonoBehaviour {
         private static string LocalizationSavePath => $"{Application.persistentDataPath}/language.json";
 
         private readonly ObservableAction _onLocalizationChanged = new();

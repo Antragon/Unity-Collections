@@ -3,19 +3,22 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
-    using Components;
+    using Initialization;
     using UnityEngine;
 
-    public class LocalizationRepository : SingletonComponent<LocalizationRepository> {
+    public class LocalizationRepository : MonoBehaviour {
         private Dictionary<string, Dictionary<string, Dictionary<string, string>>> _texts;
+
+        [FromComponent] private readonly LocalizationManager _localizationManager;
 
         [SerializeField] private TextAsset[] _textAssets;
 
-        protected override void AwakeExtended() {
+        private void Awake() {
+            this.Initialize();
             _texts = _textAssets.ToDictionary(x => x.name, ReadTextAsset);
         }
 
-        private static Dictionary<string, Dictionary<string, string>> ReadTextAsset(TextAsset textAsset) {
+        private Dictionary<string, Dictionary<string, string>> ReadTextAsset(TextAsset textAsset) {
             var text = textAsset.text.Replace("\r\n", "@");
             var textTable = CsvReader.ReadAsTable(text, '@', '|');
 
@@ -23,7 +26,7 @@
                 .Cast<DataRow>()
                 .ToDictionary(
                     row => (string)row["key"],
-                    row => LocalizationManager.Self.Languages
+                    row => _localizationManager.Languages
                         .Select(language => language.ToString())
                         .Select(language => new Tuple<string, string>(language, (string)row[language]))
                         .Where(tuple => !string.IsNullOrEmpty(tuple.Item2))
@@ -50,7 +53,7 @@
                 return false;
             }
 
-            var language = LocalizationManager.Self.CurrentLanguage.ToString();
+            var language = _localizationManager.CurrentLanguage.ToString();
             if (!localizedValues.TryGetValue(language, out localizedValue)) {
                 message = $"{language} localization not found for {path}.{valueKey}";
                 return false;

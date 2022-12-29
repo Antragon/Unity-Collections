@@ -8,11 +8,11 @@
             _parameters = parameters;
         }
 
-        public string GetLocalizedValue() {
-            var valueString = _value.GetLocalizedValue();
+        public string GetLocalizedValue(LocalizationRepository localizationRepository) {
+            var valueString = _value.GetLocalizedValue(localizationRepository);
             if (_parameters != null) {
                 for (var i = 0; i < _parameters.Length; i++) {
-                    valueString = valueString.Replace($"{{{i.ToString()}}}", _parameters[i].GetLocalizedValue());
+                    valueString = valueString.Replace($"{{{i.ToString()}}}", _parameters[i].GetLocalizedValue(localizationRepository));
                 }
             }
 

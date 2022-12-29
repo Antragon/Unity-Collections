@@ -1,11 +1,26 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
     using System.Collections;
     using Components;
+    using Initialization;
     using UnityEngine;
 
     public abstract class LocalizableComponent : MonoBehaviour {
+        [FromComponent(SingletonTag = GameControl.Tag)] private readonly LocalizationManager _localizationManager;
+
+        private bool _initialized;
+
+        protected void Awake() {
+            InitializeOnce();
+        }
+
+        protected void InitializeOnce() {
+            if (_initialized) return;
+            this.Initialize();
+            _initialized = true;
+        }
+
         protected void OnEnable() {
-            LocalizationManager.Self.OnLocalizationChanged.AddListener(OnLocalizationChanged);
+            _localizationManager.OnLocalizationChanged.AddListener(OnLocalizationChanged);
             StartCoroutine(LocalizeLate());
         }
 
@@ -16,7 +31,7 @@
 
         protected void OnDisable() {
             if (GameControl.ApplicationIsQuitting) return;
-            LocalizationManager.Self.OnLocalizationChanged.RemoveListener(OnLocalizationChanged);
+            _localizationManager.OnLocalizationChanged.RemoveListener(OnLocalizationChanged);
         }
 
         protected abstract void OnLocalizationChanged();

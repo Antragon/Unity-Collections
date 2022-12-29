@@ -12,8 +12,8 @@
         [field: SerializeField] public string Path { get; set; }
         [field: SerializeField] public string ValueKey { get; set; }
 
-        public string GetLocalizedValue() {
-            if (!LocalizationRepository.Self.TryGetLocalizedValue(new ValueLocalization(Path, ValueKey), out var localizedValue, out var message)) {
+        public string GetLocalizedValue(LocalizationRepository localizationRepository) {
+            if (!localizationRepository.TryGetLocalizedValue(new ValueLocalization(Path, ValueKey), out var localizedValue, out var message)) {
                 Debug.LogWarning(message);
                 return DefaultValue();
             }

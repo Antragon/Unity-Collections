@@ -8,6 +8,6 @@
             _getValue = getValue;
         }
 
-        public string GetLocalizedValue() => _getValue();
+        public string GetLocalizedValue(LocalizationRepository localizationRepository) => _getValue();
     }
 }

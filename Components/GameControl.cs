@@ -3,9 +3,11 @@
     using UnityEngine;
     using UnityEngine.InputSystem;
 
-    public class GameControl : SingletonComponent<GameControl> {
+    public class GameControl : MonoBehaviour {
         private const float _slowMoTimeScale = 0.1f;
         private const float _physicsTimeStep = 0.02f;
+
+        public const string Tag = "GameController";
 
         public static bool ApplicationIsQuitting { get; private set; }
 
@@ -19,7 +21,7 @@
 
         public ObservableValue<bool> OverlayIsActive => _overlayIsActive.ToObservable();
 
-        protected override void AwakeExtended() {
+        private void Awake() {
             DontDestroyOnLoad(gameObject);
         }
 
