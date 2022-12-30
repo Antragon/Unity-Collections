@@ -1,12 +1,11 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
-    using Components;
     using Initialization;
     using TMPro;
     using UnityEngine;
     using UnityEngine.Serialization;
 
     public class TextProLocalization : LocalizableComponent, ITextLocalization {
-        [FromComponent(SingletonTag = GameControl.Tag)] private readonly LocalizationRepository _localizationRepository;
+        [FromComponentInSingletons] private readonly LocalizationRepository _localizationRepository;
 
         [FormerlySerializedAs("localizableString")] [SerializeField] private LocalizableString _localizableString;
 

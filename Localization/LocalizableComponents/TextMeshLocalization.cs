@@ -1,10 +1,9 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
-    using Components;
     using Initialization;
     using UnityEngine;
 
     public class TextMeshLocalization : LocalizableComponent, ITextLocalization {
-        [FromComponent(SingletonTag = GameControl.Tag)] private readonly LocalizationRepository _localizationRepository;
+        [FromComponentInSingletons] private readonly LocalizationRepository _localizationRepository;
 
         [SerializeField] private LocalizableString _localizableString;
 

@@ -1,46 +1,62 @@
 ﻿namespace Collections.Components {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
+    using Object = UnityEngine.Object;
 
     [DisallowMultipleComponent]
+    [DefaultExecutionOrder(int.MinValue)]
     public class SingletonMarker : MonoBehaviour {
         private static readonly Dictionary<string, GameObject> _instances = new();
+        private static readonly Dictionary<Type, object> _cachedComponents = new();
 
-        public static GameObject GetInstance(string tag) {
-            var instance = _instances.ContainsKey(tag) ? _instances[tag] : FindInstance(tag);
-            return instance;
+        public static T GetComponentInSingletons<T>() => (T)GetComponentInSingletons(typeof(T));
+
+        public static object GetComponentInSingletons(Type type) {
+            if (_cachedComponents.TryGetValue(type, out var component) && IsValidComponent(component)) {
+                return component;
+            }
+
+            component = _instances.Values
+                .Select(i => i.GetComponentInChildren(type, true))
+                .FirstOrDefault(c => c != null);
+
+            if (component != null) {
+                _cachedComponents[type] = component;
+            }
+
+            return component;
         }
 
-        private static GameObject FindInstance(string tag) {
-            var instances = GameObject.FindGameObjectsWithTag(tag);
-            if (instances.Length == 0) {
-                Debug.LogWarning($"Singleton not found ({tag})");
-                return null;
+        private static bool IsValidComponent(object component) {
+            return component switch {
+                null => false,
+                Object @object when !@object => false,
+                _ => true
+            };
+        }
+
+        public static object GetComponentInSingletons(Type type, string tag) {
+            if (_instances.TryGetValue(tag, out var instance)) {
+                return instance.GetComponentInChildren(type);
             }
 
-            foreach (var toDestroy in instances.Skip(1)) {
-                DestroyAndLog(toDestroy, tag);
-            }
+            Debug.LogWarning($"Singleton not found ({tag})");
+            return null;
+        }
 
-            var instance = instances[0];
-            _instances.Add(tag, instance);
-            return instance;
+        private void Awake() {
+            if (_instances.ContainsKey(tag)) {
+                DestroyAndLog(gameObject, tag);
+            } else {
+                _instances.Add(tag, gameObject);
+            }
         }
 
         private static void DestroyAndLog(GameObject toDestroy, string tag) {
             if (toDestroy.TryDestroyAndMarkAsDestroyed()) {
                 Debug.Log($"Destroyed {toDestroy.name} due to duplication ({tag})");
-            }
-        }
-
-        private void Awake() {
-            if (_instances.ContainsKey(tag)) {
-                if (_instances[tag] != gameObject) {
-                    DestroyAndLog(gameObject, tag);
-                }
-            } else {
-                _instances.Add(tag, gameObject);
             }
         }
 

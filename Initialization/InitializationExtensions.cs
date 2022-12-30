@@ -24,16 +24,18 @@
                 fields.Where(HasAttribute<FromComponentsInParentAttribute>).ForEach(instance.SetFieldFromComponentsInParent);
                 fields.Where(HasAttribute<FromComponentInChildrenAttribute>).ForEach(instance.SetFieldFromComponentInChildren);
                 fields.Where(HasAttribute<FromComponentsInChildrenAttribute>).ForEach(instance.SetFieldFromComponentsInChildren);
+                fields.Where(HasAttribute<FromComponentInSingletonsAttribute>).ForEach(instance.SetFieldFromComponentInSingletons);
                 fields.Where(MustNotBeNull).ForEach(instance.ValidateNotNull);
                 type = type.BaseType;
             }
         }
 
         private static bool MustNotBeNull(FieldInfo fieldInfo) {
-            var validatable = fieldInfo.HasAttribute<SerializeField>() ||
-                              fieldInfo.HasAttribute<FromComponentAttribute>() ||
-                              fieldInfo.HasAttribute<FromComponentInParentAttribute>() ||
-                              fieldInfo.HasAttribute<FromComponentInChildrenAttribute>();
+            var validatable = fieldInfo.HasAttribute<SerializeField>()
+                              || fieldInfo.HasAttribute<FromComponentAttribute>()
+                              || fieldInfo.HasAttribute<FromComponentInParentAttribute>()
+                              || fieldInfo.HasAttribute<FromComponentInChildrenAttribute>()
+                              || fieldInfo.HasAttribute<FromComponentInSingletonsAttribute>();
             return validatable && !fieldInfo.HasAttribute<OptionalAttribute>();
         }
 

@@ -4,7 +4,7 @@
     using UnityEngine;
 
     public static class ComponentExtensions {
-        public static void SetComponentValue(this Component instance, FieldInfo field, Component value) {
+        public static void SetComponentValue(this Component instance, FieldInfo field, object value) {
             if ((Component)field.GetValue(instance)) return;
             field.SetValue(instance, value);
         }

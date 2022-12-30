@@ -5,7 +5,7 @@
     using UnityEngine;
 
     public abstract class LocalizableComponent : MonoBehaviour {
-        [FromComponent(SingletonTag = GameControl.Tag)] private readonly LocalizationManager _localizationManager;
+        [FromComponentInSingletons] private readonly LocalizationManager _localizationManager;
 
         private bool _initialized;
 

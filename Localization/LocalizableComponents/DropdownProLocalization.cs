@@ -1,14 +1,13 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
     using System.Collections.Generic;
     using System.Linq;
-    using Components;
     using Initialization;
     using TMPro;
     using UnityEngine;
     using UnityEngine.Serialization;
 
     public class DropdownProLocalization : LocalizableComponent {
-        [FromComponent(SingletonTag = GameControl.Tag)] private readonly LocalizationRepository _localizationRepository;
+        [FromComponentInSingletons] private readonly LocalizationRepository _localizationRepository;
 
         [FormerlySerializedAs("localizableStrings")] [SerializeField] private List<LocalizableString> _localizableStrings;
 
