@@ -9,12 +9,17 @@
             while (time < 1) {
                 if (breakCondition?.Invoke() ?? false) yield break;
                 time += speed * Time.deltaTime;
-                var position = Vector2.Lerp(start, target, Mathf.SmoothStep(0, 1, time));
+                var position = SmoothStep(start, target, time);
                 update(position);
                 yield return null;
             }
 
             update(target);
+        }
+
+        public static Vector2 SmoothStep(Vector2 from, Vector2 to, float t) {
+            var step = Mathf.SmoothStep(0, 1, t);
+            return Vector2.Lerp(from, to, step);
         }
         
         public static Vector2 Clamp(this Vector2 value, Vector2 min, Vector2 max) {
