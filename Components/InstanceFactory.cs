@@ -1,13 +1,24 @@
 ﻿namespace Collections.Components {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Initialization;
     using UnityEngine;
+    using Object = UnityEngine.Object;
 
     public class InstanceFactory : MonoBehaviour {
+        [FromComponentInSingletons] private readonly ActionQueue _actionQueue;
+
         private readonly Dictionary<GameObject, Object> _instancePrefabs = new();
-        private readonly Dictionary<Object, HashSet<GameObject>> _instanceStorage = new();
+        private readonly Dictionary<Object, Queue<GameObject>> _instanceStorage = new();
+        private readonly List<IDisposable> _callbacks = new();
+
+        private void Awake() {
+            this.Initialize();
+        }
 
         private void OnDestroy() {
+            if (GameControl.ApplicationIsQuitting) return;
             Clear();
         }
 
@@ -16,36 +27,49 @@
                 instance.TryDestroyAndMarkAsDestroyed();
             }
 
+            CancelPrewarming();
             _instancePrefabs.Clear();
             _instanceStorage.Clear();
         }
 
-        public void Store(GameObject instance) {
-            if (!_instancePrefabs.TryGetValue(instance, out var prefab)) {
-                Debug.LogWarning($"Instance {instance} must be created by this factory to be stored here");
-                return;
+        public void Prewarm(GameObject prefab, Transform parent = null, int count = 1) {
+            if (_instanceStorage.TryGetValue(prefab, out var instances))
+            {
+                count -= instances.Count;
+                count = Mathf.Max(count, 0);
             }
 
-            _instanceStorage.TryAdd(prefab, new HashSet<GameObject>());
-            _instanceStorage[prefab].Add(instance);
-            instance.SetActive(false);
+            var callbacks = Enumerable.Range(0, count)
+                .Select(_ => _actionQueue.Add(() => PrewarmInternal(prefab, parent)))
+                .ToList();
+            _callbacks.AddRange(callbacks);
         }
 
-        public GameObject CreateInstance(GameObject prefab, Transform parent = null, Vector2 position = default, Quaternion rotation = default) {
-            return CreateInstance(prefab, prefab.name, parent, position, rotation);
+        private void PrewarmInternal(GameObject prefab, Transform parent) {
+            var instance = CreateInstanceInternal(prefab, parent);
+            Store(instance);
         }
 
-        public GameObject CreateInstance(GameObject prefab, string instanceName, Transform parent = null, Vector2 position = default, Quaternion rotation = default) {
+        public GameObject CreateInstance(GameObject prefab, Transform parent = null) {
+            CancelPrewarming();
             var instance = GetStoredInstance(prefab);
             if (!instance) {
-                instance = Instantiate(prefab, parent);
-                _instancePrefabs.Add(instance, prefab);
+                instance = CreateInstanceInternal(prefab, parent);
             }
 
-            instance.name = instanceName;
             instance.transform.SetParent(parent);
-            instance.transform.localPosition = position;
-            instance.transform.rotation = rotation;
+            return instance;
+        }
+
+        private void CancelPrewarming() {
+            _callbacks.ForEach(c => c.Dispose());
+            _callbacks.Clear();
+        }
+
+        private GameObject CreateInstanceInternal(GameObject prefab, Transform parent) {
+            var instance = Instantiate(prefab, parent);
+            instance.name = prefab.name;
+            _instancePrefabs.Add(instance, prefab);
             return instance;
         }
 
@@ -54,13 +78,22 @@
                 return null;
             }
 
-            var instance = instances.FirstOrDefault();
-            instances.Remove(instance);
-            if (instance) {
+            if (instances.TryDequeue(out var instance)) {
                 instance.SetActive(true);
             }
 
             return instance;
+        }
+
+        public void Store(GameObject instance) {
+            if (!_instancePrefabs.TryGetValue(instance, out var prefab)) {
+                Debug.LogWarning($"Instance {instance} must be created by this factory to be stored here");
+                return;
+            }
+
+            _instanceStorage.TryAdd(prefab, new Queue<GameObject>());
+            _instanceStorage[prefab].Enqueue(instance);
+            instance.SetActive(false);
         }
     }
 }
