@@ -3,14 +3,17 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
+    using Extensions;
     using Initialization;
     using UnityEngine;
 
+    [DefaultExecutionOrder(DefaultExecutionOrders.Early)]
     public class LocalizationRepository : MonoBehaviour {
         private Dictionary<string, Dictionary<string, Dictionary<string, string>>> _texts;
 
         [FromComponent] private readonly LocalizationManager _localizationManager;
 
+        [SerializeField] private bool _ignoreEmpty;
         [SerializeField] private TextAsset[] _textAssets;
 
         private void Awake() {
@@ -43,6 +46,13 @@
 
             var path = valueLocalization.Path;
             var valueKey = valueLocalization.ValueKey;
+            if (_ignoreEmpty) {
+                if (!path.HasValue() || !valueKey.HasValue()) {
+                    localizedValue = string.Empty;
+                    return true;
+                }
+            }
+            
             if (!_texts.TryGetValue(path, out var values)) {
                 message = $"Path {path} not found";
                 return false;

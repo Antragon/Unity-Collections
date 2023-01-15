@@ -1,5 +1,4 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
-    using System.Collections;
     using Components;
     using Initialization;
     using UnityEngine;
@@ -21,11 +20,6 @@
 
         protected void OnEnable() {
             _localizationManager.OnLocalizationChanged.AddListener(OnLocalizationChanged);
-            StartCoroutine(LocalizeLate());
-        }
-
-        private IEnumerator LocalizeLate() {
-            yield return new WaitForEndOfFrame();
             OnLocalizationChanged();
         }
 
