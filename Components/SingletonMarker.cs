@@ -48,6 +48,7 @@
 
         private void Awake() {
             if (_instances.ContainsKey(tag)) {
+                gameObject.SetActive(false);
                 DestroyAndLog(gameObject, tag);
             } else {
                 _instances.Add(tag, gameObject);
