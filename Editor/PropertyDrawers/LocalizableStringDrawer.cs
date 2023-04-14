@@ -8,13 +8,11 @@
         private const string _pathName = nameof(LocalizableString.Path);
         private const string _valueKeyName = nameof(LocalizableString.ValueKey);
 
-        private readonly string _propertyLabel = ObjectNames.NicifyVariableName(nameof(LocalizableString));
-
         private Rect _rect;
         private SerializedProperty _property;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-            _rect = EditorGUI.PrefixLabel(position, new GUIContent(_propertyLabel));
+            _rect = EditorGUI.PrefixLabel(position, label);
             _property = property;
             var indentLevel = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
