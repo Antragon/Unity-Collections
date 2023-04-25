@@ -18,9 +18,9 @@
             }
         }
 
-        public static IEnumerator SmoothLerpTowards(this Transform transform, Vector2 target, float speed, Func<bool> breakCondition = null) {
+        public static IEnumerator SmoothLerpTowards(this Transform transform, Vector2 target, float speed, Func<bool> breakCondition = null, bool unscaledTime = false) {
             var start = (Vector2)transform.position;
-            yield return start.SmoothLerpTowards(target, speed, transform.SetPosition2D, breakCondition);
+            yield return start.SmoothLerpTowards(target, speed, transform.SetPosition2D, breakCondition, unscaledTime);
         }
 
         public static void SetPosition2D(this Transform transform, Vector2 position2D) {

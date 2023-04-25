@@ -4,14 +4,9 @@
     using UnityEngine.InputSystem;
 
     public class GameControl : MonoBehaviour {
-        private const float _slowMoTimeScale = 0.1f;
-        private const float _physicsTimeStep = 0.02f;
-
         public static bool ApplicationIsQuitting { get; private set; }
 
         private readonly ObservableProperty<bool> _overlayIsActive = new();
-
-        [SerializeField] private bool _applySlowMotionToPhysics;
 
         private int _fps;
         private float _cooldown = 1;
@@ -28,21 +23,8 @@
         }
 
         private void Update() {
-            UpdateSlowMotion();
             UpdateFpsCounter();
             UpdateOverlay();
-        }
-
-        private void UpdateSlowMotion() {
-            if (Keyboard.current[Key.Tab].wasPressedThisFrame) {
-                Time.timeScale = _slowMoTimeScale;
-                if (_applySlowMotionToPhysics) {
-                    Time.fixedDeltaTime = _physicsTimeStep * _slowMoTimeScale;
-                }
-            } else if (Keyboard.current[Key.Tab].wasReleasedThisFrame) {
-                Time.timeScale = 1;
-                Time.fixedDeltaTime = _physicsTimeStep;
-            }
         }
 
         private void UpdateFpsCounter() {
