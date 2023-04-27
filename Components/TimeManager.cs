@@ -1,9 +1,13 @@
 ﻿namespace Collections.Components {
+    using System.Collections.Generic;
+    using System.Linq;
     using UnityEngine;
     using UnityEngine.InputSystem;
 
     public class TimeManager : MonoBehaviour {
         private const float _slowMoTimeScale = 0.1f;
+
+        private readonly HashSet<object> _timeStoppers = new();
 
         [SerializeField] private float _timeScaleDefault = 1;
 
@@ -11,11 +15,19 @@
 
         public float TimeScaleMultiplier {
             get => _timeScaleMultiplier;
-            set => SetTimeScaleMultiplier(value);
+            set {
+                _timeScaleMultiplier = value;
+                UpdateTimeScale();
+            }
         }
 
-        private void SetTimeScaleMultiplier(float value) {
-            _timeScaleMultiplier = value;
+        public void AddTimeStopper(object timeStopper) {
+            _timeStoppers.Add(timeStopper);
+            UpdateTimeScale();
+        }
+
+        public void RemoveTimeStopper(object timeStopper) {
+            _timeStoppers.Remove(timeStopper);
             UpdateTimeScale();
         }
 
@@ -24,11 +36,13 @@
         }
 
         private void OnValidate() {
-            UpdateTimeScale();
+            if (Application.isPlaying) {
+                UpdateTimeScale();
+            }
         }
 
         private void UpdateTimeScale() {
-            Time.timeScale = _timeScaleDefault * TimeScaleMultiplier;
+            Time.timeScale = _timeStoppers.Any() ? 0 : _timeScaleDefault * TimeScaleMultiplier;
         }
 
         private void Update() {
