@@ -39,7 +39,7 @@
         }
 
         private void UpdateOverlay() {
-            if (Keyboard.current[Key.H].wasPressedThisFrame) {
+            if (Keyboard.current[Key.F5].wasPressedThisFrame) {
                 _overlayIsActive.Value = !_overlayIsActive.Value;
             }
         }

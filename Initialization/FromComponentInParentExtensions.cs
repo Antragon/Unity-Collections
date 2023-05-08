@@ -4,7 +4,7 @@
 
     public static class FromComponentInParentExtensions {
         public static void SetFieldFromComponentInParent(this Component instance, FieldInfo field) {
-            var component = instance.GetComponentInParent(field.FieldType);
+            var component = instance.GetComponentInParent(field.FieldType, true);
             instance.SetComponentValue(field, component);
         }
 
