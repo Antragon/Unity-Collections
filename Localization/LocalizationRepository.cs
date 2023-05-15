@@ -63,7 +63,7 @@
                 return false;
             }
 
-            var language = _localizationManager.CurrentLanguage.ToString();
+            var language = _localizationManager.Language.ToString();
             if (!localizedValues.TryGetValue(language, out localizedValue)) {
                 message = $"{language} localization not found for {path}.{valueKey}";
                 return false;

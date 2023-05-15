@@ -5,8 +5,6 @@
     using UnityEngine;
 
     public class LocalizationManager : MonoBehaviour {
-        private static string LocalizationSavePath => $"{Application.persistentDataPath}/language.json";
-
         private readonly ObservableAction _onLocalizationChanged = new();
 
         [SerializeField] private SystemLanguage _defaultLanguage;
@@ -17,29 +15,25 @@
 
         private SystemLanguage? _currentLanguage;
 
-        public SystemLanguage CurrentLanguage {
+        public SystemLanguage Language {
             get => _currentLanguage ??= GetLanguage();
             set => SetLanguage(value);
         }
 
         private SystemLanguage GetLanguage() {
-            lock (LocalizationSavePath) {
-                if (DataSaver.TryLoadJson<SystemLanguage>(LocalizationSavePath, out var language) && Languages.Contains(language)) {
-                    return language;
-                }
-
-                language = Languages.Contains(Application.systemLanguage) ? Application.systemLanguage : _defaultLanguage;
-                DataSaver.SaveJson(language, LocalizationSavePath);
+            if (OptionsRepository.TryGet(nameof(Language), out SystemLanguage language) && Languages.Contains(language)) {
                 return language;
             }
+
+            language = Languages.Contains(Application.systemLanguage) ? Application.systemLanguage : _defaultLanguage;
+            OptionsRepository.Set(nameof(Language), language);
+            return language;
         }
 
         private void SetLanguage(SystemLanguage value) {
-            lock (LocalizationSavePath) {
-                _currentLanguage = value;
-                DataSaver.SaveJson(value, LocalizationSavePath);
-                _onLocalizationChanged.Invoke();
-            }
+            _currentLanguage = value;
+            OptionsRepository.Set(nameof(Language), value);
+            _onLocalizationChanged.Invoke();
         }
     }
 }
