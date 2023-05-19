@@ -8,6 +8,8 @@
 
         private readonly ObservableProperty<bool> _overlayIsActive = new();
 
+        [SerializeField] private Key _overlayKey;
+
         private int _fps;
         private float _cooldown = 1;
         private string _fpsText = "999 FPS";
@@ -39,7 +41,7 @@
         }
 
         private void UpdateOverlay() {
-            if (Keyboard.current[Key.F5].wasPressedThisFrame) {
+            if (Keyboard.current[_overlayKey].wasPressedThisFrame) {
                 _overlayIsActive.Value = !_overlayIsActive.Value;
             }
         }
