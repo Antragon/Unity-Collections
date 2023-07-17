@@ -3,21 +3,21 @@
     using UnityEngine;
 
     public static class FromComponentExtensions {
-        public static void SetFieldFromComponent(this Component instance, FieldInfo field) {
-            var component = instance.GetComponent(field.FieldType);
+        public static void SetFieldFromComponent(this object instance, FieldInfo field, Component componentProvider) {
+            var component = componentProvider.GetComponent(field.FieldType);
             instance.SetComponentValue(field, component);
         }
 
-        public static void SetFieldFromComponents(this Component instance, FieldInfo field) {
+        public static void SetFieldFromComponents(this object instance, FieldInfo field, Component componentProvider) {
             var elementType = field.FieldType.GetElementType();
             const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.NonPublic;
             var method = typeof(FromComponentExtensions).GetMethod(nameof(SetFieldFromComponentsGeneric), bindingFlags);
             var genericMethod = method!.MakeGenericMethod(elementType);
-            genericMethod.Invoke(null, new object[] { instance, field });
+            genericMethod.Invoke(null, new[] { instance, field, componentProvider });
         }
 
-        private static void SetFieldFromComponentsGeneric<TComponent>(Component instance, FieldInfo field) {
-            var components = instance.GetComponents<TComponent>();
+        private static void SetFieldFromComponentsGeneric<TComponent>(object instance, FieldInfo field, Component componentProvider) {
+            var components = componentProvider.GetComponents<TComponent>();
             instance.SetComponentValue(field, components);
         }
     }

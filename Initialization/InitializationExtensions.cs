@@ -1,5 +1,6 @@
 ﻿namespace Collections.Initialization {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using MoreLinq;
@@ -8,22 +9,30 @@
 
 #line hidden
     public static class InitializationExtensions {
-        private static readonly Type _monoBehaviourType = typeof(MonoBehaviour);
+        private static readonly HashSet<Type> _unityTypes = new() {
+            typeof(MonoBehaviour),
+            typeof(ScriptableObject)
+        };
 
         public static void Initialize(this Component instance) {
-            var type = instance.GetType();
-            instance.Initialize(type);
+            instance.Initialize(instance);
         }
 
-        private static void Initialize(this Component instance, Type type) {
-            while (type != null && type != _monoBehaviourType && _monoBehaviourType.IsAssignableFrom(type)) {
+        public static void Initialize<T>(this T instance, Component componentProvider)
+        where T : class {
+            var type = instance.GetType();
+            instance.Initialize(componentProvider, type);
+        }
+
+        private static void Initialize(this object instance, Component componentProvider, Type type) {
+            while (type != null && !_unityTypes.Contains(type)) {
                 var fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
-                fields.Where(HasAttribute<FromComponentAttribute>).ForEach(instance.SetFieldFromComponent);
-                fields.Where(HasAttribute<FromComponentsAttribute>).ForEach(instance.SetFieldFromComponents);
-                fields.Where(HasAttribute<FromComponentInParentAttribute>).ForEach(instance.SetFieldFromComponentInParent);
-                fields.Where(HasAttribute<FromComponentsInParentAttribute>).ForEach(instance.SetFieldFromComponentsInParent);
-                fields.Where(HasAttribute<FromComponentInChildrenAttribute>).ForEach(instance.SetFieldFromComponentInChildren);
-                fields.Where(HasAttribute<FromComponentsInChildrenAttribute>).ForEach(instance.SetFieldFromComponentsInChildren);
+                fields.Where(HasAttribute<FromComponentAttribute>).ForEach(f => instance.SetFieldFromComponent(f, componentProvider));
+                fields.Where(HasAttribute<FromComponentsAttribute>).ForEach(f => instance.SetFieldFromComponents(f, componentProvider));
+                fields.Where(HasAttribute<FromComponentInParentAttribute>).ForEach(f => instance.SetFieldFromComponentInParent(f, componentProvider));
+                fields.Where(HasAttribute<FromComponentsInParentAttribute>).ForEach(f => instance.SetFieldFromComponentsInParent(f, componentProvider));
+                fields.Where(HasAttribute<FromComponentInChildrenAttribute>).ForEach(f => instance.SetFieldFromComponentInChildren(f, componentProvider));
+                fields.Where(HasAttribute<FromComponentsInChildrenAttribute>).ForEach(f => instance.SetFieldFromComponentsInChildren(f, componentProvider));
                 fields.Where(HasAttribute<FromComponentInSingletonsAttribute>).ForEach(instance.SetFieldFromComponentInSingletons);
                 fields.Where(MustNotBeNull).ForEach(instance.ValidateNotNull);
                 type = type.BaseType;
