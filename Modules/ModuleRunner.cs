@@ -1,38 +1,37 @@
 ﻿namespace Collections.Modules {
-    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Initialization;
     using MoreLinq;
-    using UnityEditor;
     using UnityEngine;
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
     public abstract class ModuleRunner : MonoBehaviour {
-        private static readonly Type _moduleType = typeof(IModule);
+#if UNITY_EDITOR
+        protected void OnValidate() {
+            _moduleBuilders.ForEach(m => m.UpdateType());
+            EditorUtility.SetDirty(this);
+        }
+#endif
 
         private readonly List<IModule> _modules = new();
 
-        public abstract MonoScript[] ModuleScripts { get; set; }
+        [SerializeField] private ModuleBuilder[] _moduleBuilders;
 
-        private void Awake() {
+        protected void Awake() {
             this.Initialize();
-            ModuleScripts.ForEach(CreateModule);
+            _moduleBuilders
+                .Select(m => m.CreateModule())
+                .Where(m => m != null)
+                .ForEach(InitializeModule);
         }
 
-        private void CreateModule(MonoScript monoScript) {
-            var type = monoScript.GetClass();
-            if (!_moduleType.IsAssignableFrom(type)) {
-                Debug.LogWarning($"Cannot create instance of {type}. Must inherit from {_moduleType}");
-                return;
-            }
-
-            try {
-                var module = (IModule)Activator.CreateInstance(type);
-                module.Initialize(this);
-                module.CoroutineCallback.AddListener(coroutine => StartCoroutine(coroutine));
-                _modules.Add(module);
-            } catch (MissingMethodException e) {
-                Debug.LogWarning(e.Message);
-            }
+        private void InitializeModule(IModule module) {
+            module.Initialize(this);
+            module.CoroutineCallback.AddListener(coroutine => StartCoroutine(coroutine));
+            _modules.Add(module);
         }
 
         protected virtual void Start() {
