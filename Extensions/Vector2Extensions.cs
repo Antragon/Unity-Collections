@@ -29,6 +29,13 @@
             return new Vector2(clampX, clampY);
         }
 
+        public static Vector2 RoundToDecimals(this Vector2 value, int decimals) {
+            var multiplier = Mathf.Pow(10, decimals);
+            var xValue = Mathf.Round(value.x * multiplier) / multiplier;
+            var yValue = Mathf.Round(value.y * multiplier) / multiplier;
+            return new Vector2(xValue, yValue);
+        }
+
         public static bool IsOrthogonal(this Vector2 value) {
             var orthogonal = value.x == 0 || value.y == 0;
             return orthogonal;
