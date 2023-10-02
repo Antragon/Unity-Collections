@@ -37,8 +37,8 @@
             return textAssetAsDictionary;
         }
 
-        public bool TryGetLocalizedValue(ValueLocalization valueLocalization, out string localizedValue)
-            => TryGetLocalizedValue(valueLocalization, out localizedValue, out _);
+        public bool HasLocalizedValue(ValueLocalization valueLocalization)
+            => TryGetLocalizedValue(valueLocalization, out _, out _);
 
         public bool TryGetLocalizedValue(ValueLocalization valueLocalization, out string localizedValue, out string message) {
             localizedValue = string.Empty;

@@ -12,6 +12,10 @@
         [field: SerializeField] public string Path { get; set; }
         [field: SerializeField] public string ValueKey { get; set; }
 
+        public bool IsLocalized(LocalizationRepository localizationRepository) {
+            return localizationRepository.HasLocalizedValue(new ValueLocalization(Path, ValueKey));
+        }
+
         public string GetLocalizedValue(LocalizationRepository localizationRepository) {
             if (!localizationRepository.TryGetLocalizedValue(new ValueLocalization(Path, ValueKey), out var localizedValue, out var message)) {
                 Debug.LogWarning(message);

@@ -3,18 +3,20 @@
     using UnityEngine;
 
     public class LocalizableCallbackString : ILocalizableValue {
-        private readonly LocalizationRepository _localizationRepository;
         private readonly string _path;
         private readonly Func<string> _getValueKey;
 
-        public LocalizableCallbackString(LocalizationRepository localizationRepository, string path, Func<string> getValueKey) {
-            _localizationRepository = localizationRepository;
+        public LocalizableCallbackString(string path, Func<string> getValueKey) {
             _path = path;
             _getValueKey = getValueKey;
         }
 
+        public bool IsLocalized(LocalizationRepository localizationRepository) {
+            return localizationRepository.HasLocalizedValue(new ValueLocalization(_path, _getValueKey()));
+        }
+
         public string GetLocalizedValue(LocalizationRepository localizationRepository) {
-            if (!_localizationRepository.TryGetLocalizedValue(new ValueLocalization(_path, _getValueKey()), out var localizedValue, out var message)) {
+            if (!localizationRepository.TryGetLocalizedValue(new ValueLocalization(_path, _getValueKey()), out var localizedValue, out var message)) {
                 Debug.LogWarning(message);
                 return DefaultValue();
             }

@@ -8,6 +8,8 @@
             _getValue = getValue;
         }
 
+        public bool IsLocalized(LocalizationRepository localizationRepository) => true;
+
         public string GetLocalizedValue(LocalizationRepository localizationRepository) => _getValue();
     }
 }
