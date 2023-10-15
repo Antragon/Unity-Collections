@@ -1,7 +1,7 @@
 ﻿namespace Collections.Observable {
     using System;
 
-    public class ObservableValue<T> {
+    public class ObservableValue<T> : IObservable<T> {
         private readonly ObservableProperty<T> _observableProperty;
 
         public ObservableValue(ObservableProperty<T> observableProperty) {
@@ -10,23 +10,20 @@
 
         public T Value => _observableProperty.Value;
 
-        public ObservableValue<T> AddListener(Action<T> action) {
-            _observableProperty.AddListener(action);
-            return this;
-        }
-
-        public ObservableValue<T> AddAndInvokeListener(Action<T> action) {
-            _observableProperty.AddListener(action);
+        public ObservableCallback<T> AddAndInvokeListener(Action<T> action) {
             action(Value);
-            return this;
+            return AddListener(action);
         }
 
-        public ObservableValue<T> ListenOnce(Action<T> action) {
-            _observableProperty.ListenOnce(action);
-            return this;
+        public ObservableCallback<T> AddListener(Action<T> action) {
+            return new ObservableCallback<T>(_observableProperty.ObservableAction).AddListener(action);
         }
 
-        public ObservableValue<T> RemoveListener(Action<T> action) {
+        public ObservableCallback<T> ListenOnce(Action<T> action) {
+            return new ObservableCallback<T>(_observableProperty.ObservableAction).ListenOnce(action);
+        }
+
+        public IObservable<T> RemoveListener(Action<T> action) {
             _observableProperty.RemoveListener(action);
             return this;
         }

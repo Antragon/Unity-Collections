@@ -2,13 +2,13 @@
     using System;
 
     [Serializable]
-    public class ObservableProperty<T> {
-        private readonly ObservableAction<T> _onValueChanged = new();
-
+    public class ObservableProperty<T> : IObservable<T> {
         private T _value;
 
         public ObservableProperty()
             : this(default) { }
+
+        internal ObservableAction<T> ObservableAction { get; } = new();
 
         public ObservableProperty(T value) {
             Value = value;
@@ -30,31 +30,28 @@
         }
 
         public void Invoke() {
-            _onValueChanged.Invoke(_value);
+            ObservableAction.Invoke(_value);
         }
 
         public void SetSilently(T value) {
             _value = value;
         }
 
-        public ObservableProperty<T> AddListener(Action<T> onValueChanged) {
-            _onValueChanged.AddListener(onValueChanged);
-            return this;
+        public ObservableCallback<T> AddAndInvokeListener(Action<T> action) {
+            action(Value);
+            return AddListener(action);
         }
 
-        public ObservableProperty<T> AddAndInvokeListener(Action<T> onValueChanged) {
-            _onValueChanged.AddListener(onValueChanged);
-            onValueChanged(Value);
-            return this;
+        public ObservableCallback<T> AddListener(Action<T> action) {
+            return new ObservableCallback<T>(ObservableAction).AddListener(action);
         }
 
-        public ObservableProperty<T> ListenOnce(Action<T> onValueChanged) {
-            _onValueChanged.ListenOnce(onValueChanged);
-            return this;
+        public ObservableCallback<T> ListenOnce(Action<T> action) {
+            return new ObservableCallback<T>(ObservableAction).ListenOnce(action);
         }
 
-        public ObservableProperty<T> RemoveListener(Action<T> onValueChanged) {
-            _onValueChanged.RemoveListener(onValueChanged);
+        public IObservable<T> RemoveListener(Action<T> action) {
+            ObservableAction.RemoveListener(action);
             return this;
         }
 
