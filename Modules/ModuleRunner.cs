@@ -11,7 +11,7 @@
     public abstract class ModuleRunner : MonoBehaviour {
 #if UNITY_EDITOR
         protected void OnValidate() {
-            _moduleBuilders.ForEach(m => m.UpdateType());
+            _moduleBuilders?.ForEach(m => m.UpdateType());
             EditorUtility.SetDirty(this);
         }
 #endif
