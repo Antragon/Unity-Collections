@@ -32,7 +32,7 @@
             var guiStyle = new GUIStyle(GUI.skin.textField);
             guiStyle.CalcMinMaxWidth(new GUIContent(property.stringValue), out var min, out _);
             rect.width = Mathf.Max(min, 16);
-            property.stringValue = EditorGUI.TextField(rect, property.stringValue);
+            EditorGUI.PropertyField(rect, property, GUIContent.none);
             _rect.x += rect.width;
             _rect.width -= rect.width;
         }
@@ -48,7 +48,7 @@
         private void DrawValueKey() {
             var rect = _rect;
             var property = GetProperty(_valueKeyName);
-            property.stringValue = EditorGUI.TextField(rect, property.stringValue);
+            EditorGUI.PropertyField(rect, property, GUIContent.none);
         }
 
         private SerializedProperty GetProperty(string childPropertyName) {
