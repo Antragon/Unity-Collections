@@ -3,47 +3,64 @@
     using UnityEditor;
     using UnityEngine;
 
-    public abstract class NullableWrapperPropertyDrawerBase<T> : PropertyDrawer {
-        private Rect _rect;
-        private SerializedProperty _property;
+    public abstract class NullableWrapperPropertyDrawerBase : PropertyDrawer {
+        protected virtual float Height => 18;
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-            _rect = EditorGUI.PrefixLabel(position, label);
-            _property = property;
-            var indentLevel = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
-            DrawNullableWrapperProperty();
-            EditorGUI.indentLevel = indentLevel;
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+            var hasValueProperty = GetProperty(property, nameof(INullableWrapper<object>.HasValue));
+            return hasValueProperty.boolValue ? Height : base.GetPropertyHeight(property, label);
         }
 
-        private void DrawNullableWrapperProperty() {
-            var hasValueProperty = DrawHasValueProperty();
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+            EditorGUI.BeginProperty(position, label, property);
+            var valuePosition = EditorGUI.PrefixLabel(position, label);
+            var indentLevel = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+            DrawNullableWrapperProperty(valuePosition, property);
+            EditorGUI.indentLevel = indentLevel;
+            EditorGUI.EndProperty();
+        }
+
+        private static void DrawNullableWrapperProperty(Rect position, SerializedProperty property) {
+            var hasValueProperty = DrawHasValueProperty(position, property);
             if (hasValueProperty.boolValue) {
-                DrawValueProperty();
+                DrawValueProperty(position, property);
             }
         }
 
-        private SerializedProperty DrawHasValueProperty() {
-            var rect = _rect;
+        private static SerializedProperty DrawHasValueProperty(Rect position, SerializedProperty property) {
+            var rect = position;
             rect.width = 16;
-            var hasValueProperty = GetProperty(nameof(INullableWrapper<T>.HasValue));
+            rect.height = 16;
+            var hasValueProperty = GetProperty(property, nameof(INullableWrapper<object>.HasValue));
             EditorGUI.PropertyField(rect, hasValueProperty, GUIContent.none);
             return hasValueProperty;
         }
 
-        private void DrawValueProperty() {
-            var rect = _rect;
+        private static void DrawValueProperty(Rect position, SerializedProperty property) {
+            var rect = position;
             rect.x += 22;
             rect.width -= 22;
-            var valueProperty = GetProperty(nameof(INullableWrapper<T>.Value));
+            var valueProperty = GetProperty(property, nameof(INullableWrapper<object>.Value));
             EditorGUI.PropertyField(rect, valueProperty, GUIContent.none);
         }
 
-        private SerializedProperty GetProperty(string childPropertyName) {
-            return _property.FindPropertyRelative($"<{childPropertyName}>k__BackingField");
+        private static SerializedProperty GetProperty(SerializedProperty property, string childPropertyName) {
+            return property.FindPropertyRelative($"<{childPropertyName}>k__BackingField");
         }
     }
 
     [CustomPropertyDrawer(typeof(NullableFloatWrapper))]
-    public class NullableFloatWrapperPropertyDrawer : NullableWrapperPropertyDrawerBase<float> { }
+    public class NullableFloatWrapperPropertyDrawer : NullableWrapperPropertyDrawerBase { }
+
+    [CustomPropertyDrawer(typeof(NullableIntWrapper))]
+    public class NullableIntWrapperPropertyDrawer : NullableWrapperPropertyDrawerBase { }
+
+    [CustomPropertyDrawer(typeof(NullableRectWrapper))]
+    public class NullableRectWrapperPropertyDrawer : NullableWrapperPropertyDrawerBase {
+        protected override float Height => 38;
+    }
+
+    [CustomPropertyDrawer(typeof(NullableVector2Wrapper))]
+    public class NullableVector2WrapperPropertyDrawer : NullableWrapperPropertyDrawerBase { }
 }
