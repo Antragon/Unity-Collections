@@ -2,7 +2,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
     using UnityEngine.InputSystem;
+#endif
 
     public class TimeManager : MonoBehaviour {
         private const float _slowMoTimeScale = 0.1f;
@@ -50,11 +52,19 @@
         }
 
         private void UpdateSlowMotion() {
+#if ENABLE_INPUT_SYSTEM
             if (Keyboard.current[Key.Tab].wasPressedThisFrame) {
                 TimeScaleMultiplier = _slowMoTimeScale;
             } else if (Keyboard.current[Key.Tab].wasReleasedThisFrame) {
                 TimeScaleMultiplier = 1;
             }
+#else
+            if (Input.GetKeyDown(KeyCode.Tab)) {
+                TimeScaleMultiplier = _slowMoTimeScale;
+            } else if (Input.GetKeyUp(KeyCode.Tab)) {
+                TimeScaleMultiplier = 1;
+            }
+#endif
         }
     }
 }

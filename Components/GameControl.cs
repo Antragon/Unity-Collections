@@ -1,14 +1,20 @@
 ﻿namespace Collections.Components {
     using Observable;
     using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
     using UnityEngine.InputSystem;
+#endif
 
     public class GameControl : MonoBehaviour {
         public static bool ApplicationIsQuitting { get; private set; }
 
         private readonly ObservableProperty<bool> _overlayIsActive = new();
 
+#if ENABLE_INPUT_SYSTEM
         [SerializeField] private Key _overlayKey;
+#else
+        [SerializeField] private KeyCode _overlayKey;
+#endif
 
         private int _fps;
         private float _cooldown = 1;
@@ -41,7 +47,12 @@
         }
 
         private void UpdateOverlay() {
-            if (Keyboard.current[_overlayKey].wasPressedThisFrame) {
+#if ENABLE_INPUT_SYSTEM
+            var overlayButtonPressed = Keyboard.current[_overlayKey].wasPressedThisFrame;
+#else
+            var overlayButtonPressed = Input.GetKeyDown(_overlayKey);
+#endif
+            if (overlayButtonPressed) {
                 _overlayIsActive.Value = !_overlayIsActive.Value;
             }
         }
