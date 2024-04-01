@@ -15,7 +15,7 @@
 
         public static void Set(string optionName, object option) {
             _options[optionName] = option;
-            DataSaver.SaveJson(_options, _savePath);
+            DataSaver.SaveJson(_savePath, _options);
         }
 
         public static bool TryGet<T>(string optionName, out T option) {
