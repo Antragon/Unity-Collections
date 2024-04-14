@@ -3,6 +3,10 @@
     using System.Linq;
 
     public static class EnumerableExtensions {
+        public static bool In<T>(this T value, params T[] enumerable) {
+            return enumerable.Contains(value);
+        }
+        
         public static bool In<T>(this T value, IEnumerable<T> enumerable) {
             return enumerable.Contains(value);
         }
