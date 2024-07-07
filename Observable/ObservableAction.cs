@@ -5,7 +5,16 @@
     public class ObservableAction<T> : IObservable<T>, IObservationExtender<T> {
         private readonly List<Action<T>> _oneTimeListeners = new();
 
-        private Action<T> _action;
+        private event Action<T> Event;
+
+        public void Invoke(T value) {
+            var oneTimeListeners = _oneTimeListeners.ToArray();
+            Event?.Invoke(value);
+            foreach (var action in oneTimeListeners) {
+                Event -= action;
+                _oneTimeListeners.Remove(action);
+            }
+        }
 
         public ObservableCallback<T> AddAndInvokeListener(Action<T> action, T value) {
             action(value);
@@ -19,35 +28,35 @@
         public ObservableCallback<T> ListenOnce(Action<T> action) {
             return new ObservableCallback<T>(this).ListenOnce(action);
         }
-
+        
         public IObservable<T> RemoveListener(Action<T> action) {
-            _action -= action;
+            Event -= action;
+            _oneTimeListeners.Remove(action);
             return this;
         }
 
         void IObservationExtender<T>.AddListener(Action<T> action) {
-            _action += action;
+            Event += action;
         }
 
         void IObservationExtender<T>.ListenOnce(Action<T> action) {
-            _action += action;
+            Event += action;
             _oneTimeListeners.Add(action);
-        }
-
-        public void Invoke(T value) {
-            var oneTimeListeners = _oneTimeListeners.ToArray();
-            _action?.Invoke(value);
-            foreach (var action in oneTimeListeners) {
-                _action -= action;
-                _oneTimeListeners.Remove(action);
-            }
         }
     }
 
     public class ObservableAction : IObservable, IObservationExtender {
         private readonly List<Action> _oneTimeListeners = new();
 
-        private Action _action;
+        private event Action Event;
+
+        public void Invoke() {
+            Event?.Invoke();
+            foreach (var action in _oneTimeListeners.ToArray()) {
+                Event -= action;
+                _oneTimeListeners.Remove(action);
+            }
+        }
 
         public ObservableCallback AddAndInvokeListener(Action action) {
             action();
@@ -61,27 +70,20 @@
         public ObservableCallback ListenOnce(Action action) {
             return new ObservableCallback(this).ListenOnce(action);
         }
-
+        
         public IObservable RemoveListener(Action action) {
-            _action -= action;
+            Event -= action;
+            _oneTimeListeners.Remove(action);
             return this;
         }
 
         void IObservationExtender.AddListener(Action action) {
-            _action += action;
+            Event += action;
         }
 
         void IObservationExtender.ListenOnce(Action action) {
-            _action += action;
+            Event += action;
             _oneTimeListeners.Add(action);
-        }
-
-        public void Invoke() {
-            _action?.Invoke();
-            foreach (var action in _oneTimeListeners.ToArray()) {
-                _action -= action;
-                _oneTimeListeners.Remove(action);
-            }
         }
     }
 }

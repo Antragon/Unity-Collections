@@ -1,31 +1,36 @@
 ﻿namespace Collections.Observable {
     using System;
 
-    public class ObservableValue<T> : IObservable<T> {
-        private readonly ObservableProperty<T> _observableProperty;
+    public class ObservableValue<T> : IObservableValue<T> {
+        protected readonly ObservableProperty<T> _observableProperty;
 
         public ObservableValue(ObservableProperty<T> observableProperty) {
             _observableProperty = observableProperty;
         }
 
         public T Value => _observableProperty.Value;
-
-        public ObservableCallback<T> AddAndInvokeListener(Action<T> action) {
-            action(Value);
-            return AddListener(action);
+        public ObservableValueCallback<T> AddAndInvokeListener(Action<T> action) {
+            return _observableProperty.AddAndInvokeListener(action);
         }
 
-        public ObservableCallback<T> AddListener(Action<T> action) {
-            return new ObservableCallback<T>(_observableProperty.ObservableAction).AddListener(action);
+        public ObservableValueCallback<T> AddAndInvokeChangeListener(Action<ValueArgs<T>> action) {
+            return _observableProperty.AddAndInvokeChangeListener(action);
         }
 
-        public ObservableCallback<T> ListenOnce(Action<T> action) {
-            return new ObservableCallback<T>(_observableProperty.ObservableAction).ListenOnce(action);
+        public ObservableValueCallback<T> AddListener(Action<T> action) {
+            return _observableProperty.AddListener(action);
         }
 
-        public IObservable<T> RemoveListener(Action<T> action) {
-            _observableProperty.RemoveListener(action);
-            return this;
+        public ObservableValueCallback<T> AddChangeListener(Action<ValueArgs<T>> action) {
+            return _observableProperty.AddChangeListener(action);
+        }
+
+        public ObservableValueCallback<T> ListenOnce(Action<T> action) {
+            return _observableProperty.ListenOnce(action);
+        }
+
+        public ObservableValueCallback<T> ListenToChangeOnce(Action<ValueArgs<T>> action) {
+            return _observableProperty.ListenToChangeOnce(action);
         }
 
         public override string ToString() {

@@ -5,6 +5,9 @@
 
     [Serializable]
     public class IntRange : Range<int> {
+        public IntRange(int start = default, int end = default)
+            : base(start, end) { }
+
         public IEnumerable<int> All => Enumerable.Range(Start, End - Start + 1);
     }
 }

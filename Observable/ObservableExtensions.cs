@@ -3,12 +3,12 @@
     using System.Collections.Generic;
 
     public static class ObservableExtensions {
-        public static Observable ToObservable(this ObservableAction observableAction) {
-            return new Observable(observableAction);
+        public static Observable ToObservable(this ObservableAction subject) {
+            return new Observable(subject);
         }
 
-        public static Observable<T> ToObservable<T>(this ObservableAction<T> observableAction) {
-            return new Observable<T>(observableAction);
+        public static Observable<T> ToObservable<T>(this ObservableAction<T> subject) {
+            return new Observable<T>(subject);
         }
 
         public static ObservableValue<T> ToObservable<T>(this ObservableProperty<T> subject) {

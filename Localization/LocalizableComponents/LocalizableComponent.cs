@@ -1,12 +1,14 @@
 ﻿namespace Collections.Localization.LocalizableComponents {
     using Components;
     using Initialization;
+    using Observable;
     using UnityEngine;
 
     public abstract class LocalizableComponent : MonoBehaviour {
         [FromComponentInSingletons] private readonly LocalizationManager _localizationManager;
 
         private bool _initialized;
+        private ObservableCallback _callback;
 
         protected void Awake() {
             InitializeOnce();
@@ -19,13 +21,13 @@
         }
 
         protected void OnEnable() {
-            _localizationManager.OnLocalizationChanged.AddListener(OnLocalizationChanged);
+            _callback = _localizationManager.OnLocalizationChanged.AddListener(OnLocalizationChanged);
             OnLocalizationChanged();
         }
 
         protected void OnDisable() {
             if (GameControl.ApplicationIsQuitting) return;
-            _localizationManager.OnLocalizationChanged.RemoveListener(OnLocalizationChanged);
+            _callback?.Dispose();
         }
 
         protected abstract void OnLocalizationChanged();

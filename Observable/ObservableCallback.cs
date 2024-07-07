@@ -10,15 +10,13 @@
             _observationExtender = observationExtender;
         }
 
-        public ObservableCallback<T> AddListener(Action<T> action) {
-            _observationExtender.AddListener(action);
-            _actions.Add(action);
-            return this;
+        public ObservableCallback<T> AddAndInvokeListener(Action<T> action, T value) {
+            action(value);
+            return AddListener(action);
         }
 
-        public ObservableCallback<T> AddAndInvokeListener(Action<T> action, T value) {
+        public ObservableCallback<T> AddListener(Action<T> action) {
             _observationExtender.AddListener(action);
-            action(value);
             _actions.Add(action);
             return this;
         }
