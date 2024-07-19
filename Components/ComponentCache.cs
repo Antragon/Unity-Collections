@@ -12,6 +12,11 @@
 
         public GameObject GameObject { get; }
 
+        public bool TryGet<T>(out T component) {
+            component = Get<T>();
+            return component != null;
+        }
+
         public T Get<T>() {
             if (!_cache.TryGetValue(typeof(T), out var component)) {
                 component = GameObject.GetComponent<T>();
