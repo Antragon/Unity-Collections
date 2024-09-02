@@ -21,8 +21,8 @@
             set => _inputField.text = value.ToString(CultureInfo.CurrentCulture);
         }
 
-        public Observable<float> OnEditingEnded => _onEditingEnded.ToObservable();
-        public Observable<float> OnValueChanged => _onValueChanged.ToObservable();
+        public Observable<float> OnEditingEnded => _onEditingEnded.ToReadOnly();
+        public Observable<float> OnValueChanged => _onValueChanged.ToReadOnly();
 
         private void Awake() {
             this.Initialize();

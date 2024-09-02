@@ -20,7 +20,7 @@
         private float _cooldown = 1;
         private string _fpsText = "999 FPS";
 
-        public ObservableValue<bool> OverlayIsActive => _overlayIsActive.ToObservable();
+        public ObservableValue<bool> OverlayIsActive => _overlayIsActive.ToReadOnly();
 
         private void Awake() {
             DontDestroyOnLoad(gameObject);
