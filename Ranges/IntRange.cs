@@ -2,12 +2,22 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using UnityEngine;
 
     [Serializable]
-    public class IntRange : Range<int> {
-        public IntRange(int start = default, int end = default)
-            : base(start, end) { }
+    public struct IntRange : IRange<int> {
+        public IntRange(int start = default, int end = default) {
+            Start = start;
+            End = end;
+        }
+
+        [field: SerializeField] public int Start { get; private set; }
+        [field: SerializeField] public int End { get; private set; }
 
         public IEnumerable<int> All => Enumerable.Range(Start, End - Start + 1);
+
+        public override string ToString() {
+            return $"{Start} - {End}";
+        }
     }
 }

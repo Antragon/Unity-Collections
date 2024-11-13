@@ -6,8 +6,8 @@
 
     public abstract class RangePropertyDrawer<T> : PropertyDrawer
     where T : IComparable {
-        private const string _startName = nameof(Range<T>.Start);
-        private const string _endName = nameof(Range<T>.End);
+        private const string _startName = nameof(IRange<T>.Start);
+        private const string _endName = nameof(IRange<T>.End);
 
         private SingleLineLayout _layout;
         private SerializedProperty _property;
