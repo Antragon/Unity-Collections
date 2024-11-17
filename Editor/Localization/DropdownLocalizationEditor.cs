@@ -20,7 +20,6 @@
             base.OnInspectorGUI();
 
             if (Application.isPlaying) return;
-            if (_dropdownLocalization.LocalizableValues is null) return;
 
             var optionDataList = _dropdownLocalization.LocalizableValues
                 .Cast<LocalizableString>()

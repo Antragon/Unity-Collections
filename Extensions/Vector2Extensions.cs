@@ -4,7 +4,13 @@
     using UnityEngine;
 
     public static class Vector2Extensions {
-        public static IEnumerator SmoothLerpTowards(this Vector2 start, Vector2 target, float speed, Action<Vector2> update, Func<bool> breakCondition = null, bool unscaledTime = false) {
+        public static IEnumerator SmoothLerpTowards(
+            this Vector2 start,
+            Vector2 target,
+            float speed,
+            Action<Vector2> update,
+            Func<bool>? breakCondition = null,
+            bool unscaledTime = false) {
             var time = 0f;
             while (time < 1) {
                 if (breakCondition?.Invoke() ?? false) yield break;

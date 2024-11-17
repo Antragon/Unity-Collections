@@ -3,11 +3,11 @@
     using System.Collections.Generic;
 
     public class ObservableAction<T> : IObservable<T>, IObservationExtender<T> {
-        private readonly List<Action<T>> _oneTimeListeners = new();
+        private readonly List<Action<T?>> _oneTimeListeners = new();
 
-        private event Action<T> Event;
+        private event Action<T?>? Event;
 
-        public void Invoke(T value) {
+        public void Invoke(T? value) {
             var oneTimeListeners = _oneTimeListeners.ToArray();
             Event?.Invoke(value);
             foreach (var action in oneTimeListeners) {
@@ -16,30 +16,30 @@
             }
         }
 
-        public ObservableCallback<T> AddAndInvokeListener(Action<T> action, T value) {
+        public ObservableCallback<T> AddAndInvokeListener(Action<T?> action, T? value) {
             action(value);
             return AddListener(action);
         }
 
-        public ObservableCallback<T> AddListener(Action<T> action) {
+        public ObservableCallback<T> AddListener(Action<T?> action) {
             return new ObservableCallback<T>(this).AddListener(action);
         }
 
-        public ObservableCallback<T> ListenOnce(Action<T> action) {
+        public ObservableCallback<T> ListenOnce(Action<T?> action) {
             return new ObservableCallback<T>(this).ListenOnce(action);
         }
         
-        public IObservable<T> RemoveListener(Action<T> action) {
+        public IObservable<T> RemoveListener(Action<T?> action) {
             Event -= action;
             _oneTimeListeners.Remove(action);
             return this;
         }
 
-        void IObservationExtender<T>.AddListener(Action<T> action) {
+        void IObservationExtender<T>.AddListener(Action<T?> action) {
             Event += action;
         }
 
-        void IObservationExtender<T>.ListenOnce(Action<T> action) {
+        void IObservationExtender<T>.ListenOnce(Action<T?> action) {
             Event += action;
             _oneTimeListeners.Add(action);
         }
@@ -48,7 +48,7 @@
     public class ObservableAction : IObservable, IObservationExtender {
         private readonly List<Action> _oneTimeListeners = new();
 
-        private event Action Event;
+        private event Action? Event;
 
         public void Invoke() {
             Event?.Invoke();

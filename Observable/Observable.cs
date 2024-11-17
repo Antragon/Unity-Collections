@@ -8,20 +8,20 @@
             _observableAction = observableAction;
         }
 
-        public ObservableCallback<T> AddAndInvokeListener(Action<T> action, T value) {
+        public ObservableCallback<T> AddAndInvokeListener(Action<T?> action, T? value) {
             action(value);
             return AddListener(action);
         }
 
-        public ObservableCallback<T> AddListener(Action<T> action) {
+        public ObservableCallback<T> AddListener(Action<T?> action) {
             return new ObservableCallback<T>(_observableAction).AddListener(action);
         }
 
-        public ObservableCallback<T> ListenOnce(Action<T> action) {
+        public ObservableCallback<T> ListenOnce(Action<T?> action) {
             return new ObservableCallback<T>(_observableAction).ListenOnce(action);
         }
 
-        public IObservable<T> RemoveListener(Action<T> action) {
+        public IObservable<T> RemoveListener(Action<T?> action) {
             _observableAction.RemoveListener(action);
             return this;
         }

@@ -2,11 +2,11 @@
     using System;
 
     internal interface IObservationExtender<T> {
-        void AddListener(Action<T> action);
+        void AddListener(Action<T?> action);
 
-        void ListenOnce(Action<T> action);
+        void ListenOnce(Action<T?> action);
 
-        IObservable<T> RemoveListener(Action<T> action);
+        IObservable<T> RemoveListener(Action<T?> action);
     }
 
     internal interface IObservationExtender {

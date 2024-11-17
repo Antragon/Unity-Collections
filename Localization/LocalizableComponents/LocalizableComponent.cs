@@ -5,10 +5,10 @@
     using UnityEngine;
 
     public abstract class LocalizableComponent : MonoBehaviour {
-        [FromComponentInSingletons] private readonly LocalizationManager _localizationManager;
+        [FromComponentInSingletons] private readonly LocalizationManager _localizationManager = null!;
 
         private bool _initialized;
-        private ObservableCallback _callback;
+        private ObservableCallback? _callback;
 
         protected void Awake() {
             InitializeOnce();

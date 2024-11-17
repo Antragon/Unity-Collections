@@ -25,8 +25,9 @@
         }
 
         private static void Initialize(this object instance, Component componentProvider, Type type) {
-            while (type != null && !_unityTypes.Contains(type)) {
-                var fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            var nullableType = type;
+            while (nullableType != null && !_unityTypes.Contains(nullableType)) {
+                var fields = nullableType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
                 fields.Where(HasAttribute<FromComponentAttribute>).ForEach(f => instance.SetFieldFromComponent(f, componentProvider));
                 fields.Where(HasAttribute<FromComponentsAttribute>).ForEach(f => instance.SetFieldFromComponents(f, componentProvider));
                 fields.Where(HasAttribute<FromComponentInParentAttribute>).ForEach(f => instance.SetFieldFromComponentInParent(f, componentProvider));
@@ -35,7 +36,7 @@
                 fields.Where(HasAttribute<FromComponentsInChildrenAttribute>).ForEach(f => instance.SetFieldFromComponentsInChildren(f, componentProvider));
                 fields.Where(HasAttribute<FromComponentInSingletonsAttribute>).ForEach(instance.SetFieldFromComponentInSingletons);
                 fields.Where(MustNotBeNull).ForEach(instance.ValidateNotNull);
-                type = type.BaseType;
+                nullableType = nullableType.BaseType;
             }
         }
 

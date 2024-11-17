@@ -4,24 +4,24 @@
 
     public class ObservableCallback<T> : IDisposable {
         private readonly IObservationExtender<T> _observationExtender;
-        private readonly List<Action<T>> _actions = new();
+        private readonly List<Action<T?>> _actions = new();
 
         internal ObservableCallback(IObservationExtender<T> observationExtender) {
             _observationExtender = observationExtender;
         }
 
-        public ObservableCallback<T> AddAndInvokeListener(Action<T> action, T value) {
+        public ObservableCallback<T> AddAndInvokeListener(Action<T?> action, T? value) {
             action(value);
             return AddListener(action);
         }
 
-        public ObservableCallback<T> AddListener(Action<T> action) {
+        public ObservableCallback<T> AddListener(Action<T?> action) {
             _observationExtender.AddListener(action);
             _actions.Add(action);
             return this;
         }
 
-        public ObservableCallback<T> ListenOnce(Action<T> action) {
+        public ObservableCallback<T> ListenOnce(Action<T?> action) {
             _observationExtender.ListenOnce(action);
             _actions.Add(action);
             return this;

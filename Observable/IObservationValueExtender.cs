@@ -2,7 +2,7 @@
     using System;
 
     public interface IObservationValueExtender<T> {
-        T Value { get; }
+        T? Value { get; }
 
         void AddListener(Action<ValueArgs<T>> action);
 
