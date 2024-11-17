@@ -9,8 +9,8 @@
         private const string _startName = nameof(IRange<T>.Start);
         private const string _endName = nameof(IRange<T>.End);
 
-        private SingleLineLayout _layout;
-        private SerializedProperty _property;
+        private SingleLineLayout _layout = null!;
+        private SerializedProperty _property = null!;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
             position = EditorGUI.PrefixLabel(position, new GUIContent(label));

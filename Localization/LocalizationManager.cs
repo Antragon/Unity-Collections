@@ -1,6 +1,5 @@
 ﻿namespace Collections.Localization {
     using System.Linq;
-    using JetBrains.Annotations;
     using Observable;
     using UnityEngine;
 
@@ -9,7 +8,7 @@
 
         [SerializeField] private SystemLanguage _defaultLanguage;
 
-        [field: SerializeField] public SystemLanguage[] Languages { get; [UsedImplicitly] private set; }
+        [field: SerializeField] public SystemLanguage[] Languages { get; private set; } = null!;
 
         public Observable OnLocalizationChanged => _onLocalizationChanged.ToReadOnly();
 

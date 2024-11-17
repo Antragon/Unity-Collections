@@ -18,7 +18,7 @@
             return File.WriteAllTextAsync(savePath, json, token);
         }
 
-        public static bool TryLoadFile(string loadPath, out string content) {
+        public static bool TryLoadFile(string loadPath, out string? content) {
             content = null;
 
             try {
@@ -30,7 +30,7 @@
             }
         }
 
-        public static bool TryLoadJson<T>(string loadPath, out T @object) {
+        public static bool TryLoadJson<T>(string loadPath, out T? @object) {
             @object = default;
 
             try {
@@ -47,11 +47,11 @@
 
         private static T LoadJson<T>(string loadPath) {
             var json = File.ReadAllText(loadPath);
-            var @object = JsonConvert.DeserializeObject<T>(json);
+            var @object = JsonConvert.DeserializeObject<T>(json)!;
             return @object;
         }
 
-        public static T ReadJsonPart<T>(FileInfo file, string key) {
+        public static T? ReadJsonPart<T>(FileInfo file, string key) {
             if (file.Exists) {
                 var json = File.ReadAllText(file.FullName);
                 var jObject = JObject.Parse(json);

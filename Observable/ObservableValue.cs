@@ -8,8 +8,9 @@
             _observableProperty = observableProperty;
         }
 
-        public T Value => _observableProperty.Value;
-        public ObservableValueCallback<T> AddAndInvokeListener(Action<T> action) {
+        public T? Value => _observableProperty.Value;
+
+        public ObservableValueCallback<T> AddAndInvokeListener(Action<T?> action) {
             return _observableProperty.AddAndInvokeListener(action);
         }
 
@@ -17,7 +18,7 @@
             return _observableProperty.AddAndInvokeChangeListener(action);
         }
 
-        public ObservableValueCallback<T> AddListener(Action<T> action) {
+        public ObservableValueCallback<T> AddListener(Action<T?> action) {
             return _observableProperty.AddListener(action);
         }
 
@@ -25,7 +26,7 @@
             return _observableProperty.AddChangeListener(action);
         }
 
-        public ObservableValueCallback<T> ListenOnce(Action<T> action) {
+        public ObservableValueCallback<T> ListenOnce(Action<T?> action) {
             return _observableProperty.ListenOnce(action);
         }
 

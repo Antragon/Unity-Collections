@@ -9,7 +9,7 @@
 
         static OptionsRepository() {
             if (DataSaver.TryLoadJson<Dictionary<string, object>>(_savePath, out var options)) {
-                _options = options;
+                _options = options!;
             }
         }
 
@@ -18,15 +18,15 @@
             DataSaver.SaveJson(_savePath, _options);
         }
 
-        public static bool TryGet<T>(string optionName, out T option) {
+        public static bool TryGet<T>(string optionName, out T? option) {
             option = default;
             if (!_options.TryGetValue(optionName, out var value)) return false;
-            if (!TryCast(value, out T cast)) return false;
+            if (!TryCast(value, out T? cast)) return false;
             option = cast;
             return true;
         }
 
-        private static bool TryCast<T>(object value, out T option) {
+        private static bool TryCast<T>(object value, out T? option) {
             try {
                 option = (T)value;
                 return true;

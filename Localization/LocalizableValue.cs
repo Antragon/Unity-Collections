@@ -16,10 +16,8 @@
 
         public string GetLocalizedValue(LocalizationRepository localizationRepository) {
             var valueString = _value.GetLocalizedValue(localizationRepository);
-            if (_parameters != null) {
-                for (var i = 0; i < _parameters.Length; i++) {
-                    valueString = valueString.Replace($"{{{i.ToString()}}}", _parameters[i].GetLocalizedValue(localizationRepository));
-                }
+            for (var i = 0; i < _parameters.Length; i++) {
+                valueString = valueString.Replace($"{{{i.ToString()}}}", _parameters[i].GetLocalizedValue(localizationRepository));
             }
 
             return valueString;

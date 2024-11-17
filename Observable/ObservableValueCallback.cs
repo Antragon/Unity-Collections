@@ -10,9 +10,9 @@
             _observationValueExtender = observationValueExtender;
         }
 
-        public T Value => _observationValueExtender.Value;
+        public T? Value => _observationValueExtender.Value;
 
-        public ObservableValueCallback<T> AddAndInvokeListener(Action<T> action) {
+        public ObservableValueCallback<T> AddAndInvokeListener(Action<T?> action) {
             return AddAndInvokeChangeListener(args => action(args.Value));
         }
 
@@ -23,7 +23,7 @@
             return AddChangeListener(action);
         }
 
-        public ObservableValueCallback<T> AddListener(Action<T> action) {
+        public ObservableValueCallback<T> AddListener(Action<T?> action) {
             return AddChangeListener(args => action(args.Value));
         }
 
@@ -33,7 +33,7 @@
             return this;
         }
 
-        public ObservableValueCallback<T> ListenOnce(Action<T> action) {
+        public ObservableValueCallback<T> ListenOnce(Action<T?> action) {
             return ListenToChangeOnce(args => action(args.Value));
         }
 

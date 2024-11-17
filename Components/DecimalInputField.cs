@@ -10,7 +10,7 @@
         private readonly ObservableAction<float> _onEditingEnded = new();
         private readonly ObservableAction<float> _onValueChanged = new();
 
-        [FromComponent] private readonly InputField _inputField;
+        [FromComponent] private readonly InputField _inputField = null!;
 
         [SerializeField] private float _minimum;
         [SerializeField] private float _maximum;

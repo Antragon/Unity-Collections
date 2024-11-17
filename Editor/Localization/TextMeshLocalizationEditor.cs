@@ -6,8 +6,8 @@
 
     [CustomEditor(typeof(TextMeshLocalization))]
     public class TextMeshLocalizationEditor : Editor {
-        private TextMesh _textMesh;
-        private TextMeshLocalization _textMeshLocalization;
+        private TextMesh _textMesh = null!;
+        private TextMeshLocalization _textMeshLocalization = null!;
 
         private void OnEnable() {
             _textMeshLocalization = (TextMeshLocalization)target;

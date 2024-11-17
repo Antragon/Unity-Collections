@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using JetBrains.Annotations;
     using MoreLinq;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -24,7 +25,7 @@
             instance.Initialize(componentProvider, type);
         }
 
-        private static void Initialize(this object instance, Component componentProvider, Type type) {
+        private static void Initialize(this object instance, Component componentProvider, Type? type) {
             while (type != null && !_unityTypes.Contains(type)) {
                 var fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
                 fields.Where(HasAttribute<FromComponentAttribute>).ForEach(f => instance.SetFieldFromComponent(f, componentProvider));
@@ -45,7 +46,15 @@
                               || fieldInfo.HasAttribute<FromComponentInParentAttribute>()
                               || fieldInfo.HasAttribute<FromComponentInChildrenAttribute>()
                               || fieldInfo.HasAttribute<FromComponentInSingletonsAttribute>();
-            return validatable && !fieldInfo.HasAttribute<OptionalAttribute>();
+            return validatable && !IsNullable(fieldInfo);
+        }
+
+        private static bool IsNullable(FieldInfo fieldInfo) {
+            return fieldInfo
+                       .GetCustomAttributesData()
+                       .Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.NullableAttribute")
+                   || fieldInfo.HasAttribute<CanBeNullAttribute>()
+                   || fieldInfo.HasAttribute<OptionalAttribute>();
         }
 
         private static void ValidateNotNull(this object instance, FieldInfo field) {
@@ -58,7 +67,11 @@
         }
 
         private static bool HasAttribute<T>(this MemberInfo memberInfo) {
-            return Attribute.IsDefined(memberInfo, typeof(T));
+            return memberInfo.HasAttribute(typeof(T));
+        }
+
+        private static bool HasAttribute(this MemberInfo memberInfo, Type attributeType) {
+            return Attribute.IsDefined(memberInfo, attributeType);
         }
     }
 #line default

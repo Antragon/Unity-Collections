@@ -7,13 +7,13 @@
     using UnityEngine.Serialization;
 
     public class DropdownProLocalization : LocalizableComponent {
-        [FromComponentInSingletons] private readonly LocalizationRepository _localizationRepository;
+        [FromComponentInSingletons] private readonly LocalizationRepository _localizationRepository = null!;
 
-        [FormerlySerializedAs("localizableStrings")] [SerializeField] private List<LocalizableString> _localizableStrings;
+        [FormerlySerializedAs("localizableStrings")] [SerializeField] private List<LocalizableString> _localizableStrings = null!;
 
-        [FromComponentInChildren, SerializeField] private TMP_Dropdown _dropdown;
+        [FromComponentInChildren, SerializeField] private TMP_Dropdown _dropdown = null!;
 
-        private IEnumerable<ILocalizableValue> _localizableValues;
+        private IEnumerable<ILocalizableValue>? _localizableValues;
 
         public IEnumerable<ILocalizableValue> LocalizableValues {
             get => _localizableValues ??= _localizableStrings;

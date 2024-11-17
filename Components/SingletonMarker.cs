@@ -11,18 +11,18 @@
         private static readonly Dictionary<string, GameObject> _instances = new();
         private static readonly Dictionary<Type, object> _cachedComponents = new();
 
-        public static T GetComponentInSingletons<T>() => (T)GetComponentInSingletons(typeof(T));
+        public static T? GetComponentInSingletons<T>() => (T?)GetComponentInSingletons(typeof(T));
 
-        public static object GetComponentInSingletons(Type type) {
-            if (_cachedComponents.TryGetValue(type, out var component) && IsValidComponent(component)) {
-                return component;
+        public static object? GetComponentInSingletons(Type type) {
+            if (_cachedComponents.TryGetValue(type, out var cachedComponent) && IsValidComponent(cachedComponent)) {
+                return cachedComponent;
             }
 
-            component = _instances.Values
+            var component = _instances.Values
                 .Select(i => i.GetComponentInChildren(type, true))
                 .FirstOrDefault(c => c != null);
 
-            if (component != null) {
+            if (component) {
                 _cachedComponents[type] = component;
             }
 
@@ -37,7 +37,7 @@
             };
         }
 
-        public static object GetComponentInSingletons(Type type, string tag) {
+        public static object? GetComponentInSingletons(Type type, string tag) {
             if (_instances.TryGetValue(tag, out var instance)) {
                 return instance.GetComponentInChildren(type);
             }

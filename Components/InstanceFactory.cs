@@ -7,7 +7,7 @@
     using Object = UnityEngine.Object;
 
     public class InstanceFactory : MonoBehaviour {
-        [FromComponentInSingletons] private readonly ActionQueue _actionQueue;
+        [FromComponentInSingletons] private readonly ActionQueue _actionQueue = null!;
 
         private readonly Dictionary<GameObject, Object> _instancePrefabs = new();
         private readonly Dictionary<Object, Queue<GameObject>> _instanceStorage = new();
@@ -32,9 +32,8 @@
             _instanceStorage.Clear();
         }
 
-        public void Prewarm(GameObject prefab, Transform parent = null, int count = 1) {
-            if (_instanceStorage.TryGetValue(prefab, out var instances))
-            {
+        public void Prewarm(GameObject prefab, Transform? parent = null, int count = 1) {
+            if (_instanceStorage.TryGetValue(prefab, out var instances)) {
                 count -= instances.Count;
                 count = Mathf.Max(count, 0);
             }
@@ -45,18 +44,14 @@
             _callbacks.AddRange(callbacks);
         }
 
-        private void PrewarmInternal(GameObject prefab, Transform parent) {
+        private void PrewarmInternal(GameObject prefab, Transform? parent) {
             var instance = CreateInstanceInternal(prefab, parent);
             Store(instance);
         }
 
-        public GameObject CreateInstance(GameObject prefab, Transform parent = null) {
+        public GameObject CreateInstance(GameObject prefab, Transform? parent = null) {
             CancelPrewarming();
-            var instance = GetStoredInstance(prefab);
-            if (!instance) {
-                instance = CreateInstanceInternal(prefab, parent);
-            }
-
+            var instance = GetStoredInstance(prefab) ?? CreateInstanceInternal(prefab, parent);
             instance.transform.SetParent(parent);
             return instance;
         }
@@ -66,14 +61,14 @@
             _callbacks.Clear();
         }
 
-        private GameObject CreateInstanceInternal(GameObject prefab, Transform parent) {
+        private GameObject CreateInstanceInternal(GameObject prefab, Transform? parent) {
             var instance = Instantiate(prefab, parent);
             instance.name = prefab.name;
             _instancePrefabs.Add(instance, prefab);
             return instance;
         }
 
-        private GameObject GetStoredInstance(Object prefab) {
+        private GameObject? GetStoredInstance(Object prefab) {
             if (!_instanceStorage.TryGetValue(prefab, out var instances)) {
                 return null;
             }

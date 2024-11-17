@@ -6,13 +6,13 @@
     using UnityEngine.UI;
 
     public class DropdownLocalization : LocalizableComponent {
-        [FromComponentInSingletons] private readonly LocalizationRepository _localizationRepository;
+        [FromComponentInSingletons] private readonly LocalizationRepository _localizationRepository = null!;
 
-        [SerializeField] private List<LocalizableString> _localizableStrings;
+        [SerializeField] private List<LocalizableString> _localizableStrings = null!;
 
-        [FromComponentInChildren, SerializeField] private Dropdown _dropdown;
+        [FromComponentInChildren, SerializeField] private Dropdown _dropdown = null!;
 
-        private IEnumerable<ILocalizableValue> _localizableValues;
+        private IEnumerable<ILocalizableValue>? _localizableValues;
 
         public IEnumerable<ILocalizableValue> LocalizableValues {
             get => _localizableValues ??= _localizableStrings;

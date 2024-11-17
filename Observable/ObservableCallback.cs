@@ -10,7 +10,7 @@
             _observationExtender = observationExtender;
         }
 
-        public ObservableCallback<T> AddAndInvokeListener(Action<T> action, T value) {
+        public ObservableCallback<T> AddAndInvokeListener(Action<T?> action, T? value) {
             action(value);
             return AddListener(action);
         }

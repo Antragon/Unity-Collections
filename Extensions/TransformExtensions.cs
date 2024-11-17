@@ -4,7 +4,7 @@
     using UnityEngine;
 
     public static class TransformExtensions {
-        public static Transform GetSecondRoot(this Transform transform) {
+        public static Transform? GetSecondRoot(this Transform transform) {
             while (true) {
                 if (transform == transform.root) {
                     return null;
@@ -18,7 +18,12 @@
             }
         }
 
-        public static IEnumerator SmoothLerpTowards(this Transform transform, Vector2 target, float speed, Func<bool> breakCondition = null, bool unscaledTime = false) {
+        public static IEnumerator SmoothLerpTowards(
+            this Transform transform,
+            Vector2 target,
+            float speed,
+            Func<bool>? breakCondition = null,
+            bool unscaledTime = false) {
             var start = (Vector2)transform.position;
             yield return start.SmoothLerpTowards(target, speed, transform.SetPosition2D, breakCondition, unscaledTime);
         }

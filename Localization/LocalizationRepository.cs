@@ -9,12 +9,12 @@
 
     [DefaultExecutionOrder(DefaultExecutionOrders.Early)]
     public class LocalizationRepository : MonoBehaviour {
-        private Dictionary<string, Dictionary<string, Dictionary<string, string>>> _texts;
+        private Dictionary<string, Dictionary<string, Dictionary<string, string>>> _texts = null!;
 
-        [FromComponent] private readonly LocalizationManager _localizationManager;
+        [FromComponent] private readonly LocalizationManager _localizationManager = null!;
 
         [SerializeField] private bool _ignoreEmpty;
-        [SerializeField] private TextAsset[] _textAssets;
+        [SerializeField] private TextAsset[] _textAssets = null!;
 
         private void Awake() {
             this.Initialize();

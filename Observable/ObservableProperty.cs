@@ -6,25 +6,25 @@
     public class ObservableProperty<T> : IObservableValue<T>, IObservationValueExtender<T> {
         private readonly List<Action<ValueArgs<T>>> _oneTimeListeners = new();
 
-        private T _value;
+        private T? _value;
 
-        public ObservableProperty(T value = default) {
+        public ObservableProperty(T? value = default) {
             Value = value;
         }
 
-        private event Action<ValueArgs<T>> Event;
+        private event Action<ValueArgs<T>>? Event;
 
-        public T Value {
+        public T? Value {
             get => _value;
             set => SetValue(value);
         }
 
-        public void SetValue(T value) {
+        public void SetValue(T? value) {
             if (Equals(_value, value)) return;
             SetAndInvoke(value);
         }
 
-        public void SetAndInvoke(T value) {
+        public void SetAndInvoke(T? value) {
             var valueChange = new ValueArgs<T>(_value, value);
             _value = value;
             Event?.Invoke(valueChange);
@@ -39,11 +39,11 @@
             }
         }
 
-        public void SetSilently(T value) {
+        public void SetSilently(T? value) {
             _value = value;
         }
 
-        public ObservableValueCallback<T> AddAndInvokeListener(Action<T> action) {
+        public ObservableValueCallback<T> AddAndInvokeListener(Action<T?> action) {
             return AddAndInvokeChangeListener(args => action(args.Value));
         }
 
@@ -53,7 +53,7 @@
             return AddChangeListener(action);
         }
 
-        public ObservableValueCallback<T> AddListener(Action<T> action) {
+        public ObservableValueCallback<T> AddListener(Action<T?> action) {
             return AddChangeListener(args => action(args.Value));
         }
 
@@ -61,7 +61,7 @@
             return new ObservableValueCallback<T>(this).AddChangeListener(action);
         }
 
-        public ObservableValueCallback<T> ListenOnce(Action<T> action) {
+        public ObservableValueCallback<T> ListenOnce(Action<T?> action) {
             return ListenToChangeOnce(args => action(args.Value));
         }
 
