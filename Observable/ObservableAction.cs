@@ -5,7 +5,7 @@
     public class ObservableAction<T> : IObservable<T>, IObservationExtender<T> {
         private readonly List<Action<T>> _oneTimeListeners = new();
 
-        private event Action<T> Event;
+        private event Action<T>? Event;
 
         public void Invoke(T value) {
             var oneTimeListeners = _oneTimeListeners.ToArray();
@@ -48,7 +48,7 @@
     public class ObservableAction : IObservable, IObservationExtender {
         private readonly List<Action> _oneTimeListeners = new();
 
-        private event Action Event;
+        private event Action? Event;
 
         public void Invoke() {
             Event?.Invoke();

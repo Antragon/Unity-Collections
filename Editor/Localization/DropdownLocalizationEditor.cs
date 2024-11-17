@@ -8,8 +8,8 @@
 
     [CustomEditor(typeof(DropdownLocalization))]
     public class DropdownLocalizationEditor : Editor {
-        private Dropdown _dropdown;
-        private DropdownLocalization _dropdownLocalization;
+        private Dropdown _dropdown = null!;
+        private DropdownLocalization _dropdownLocalization = null!;
 
         private void OnEnable() {
             _dropdownLocalization = (DropdownLocalization)target;
@@ -20,7 +20,6 @@
             base.OnInspectorGUI();
 
             if (Application.isPlaying) return;
-            if (_dropdownLocalization.LocalizableValues is null) return;
 
             var optionDataList = _dropdownLocalization.LocalizableValues
                 .Cast<LocalizableString>()

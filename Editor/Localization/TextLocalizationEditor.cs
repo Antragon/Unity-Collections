@@ -7,8 +7,8 @@
 
     [CustomEditor(typeof(TextLocalization))]
     public class TextLocalizationEditor : Editor {
-        private Text _text;
-        private TextLocalization _textLocalization;
+        private Text _text = null!;
+        private TextLocalization _textLocalization = null!;
 
         private void OnEnable() {
             _textLocalization = (TextLocalization)target;

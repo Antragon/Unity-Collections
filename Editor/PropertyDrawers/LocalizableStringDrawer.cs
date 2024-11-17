@@ -9,7 +9,7 @@
         private const string _valueKeyName = nameof(LocalizableString.ValueKey);
 
         private Rect _rect;
-        private SerializedProperty _property;
+        private SerializedProperty _property = null!;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
             _rect = EditorGUI.PrefixLabel(position, label);

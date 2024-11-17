@@ -3,13 +3,13 @@
     using UnityEngine;
 
     public class TextMeshLocalization : LocalizableComponent, ITextLocalization {
-        [FromComponentInSingletons] private readonly LocalizationRepository _localizationRepository;
+        [FromComponentInSingletons] private readonly LocalizationRepository _localizationRepository = null!;
 
-        [SerializeField] private LocalizableString _localizableString;
+        [SerializeField] private LocalizableString _localizableString = null!;
 
-        [FromComponentInChildren, SerializeField] private TextMesh _textMesh;
+        [FromComponentInChildren, SerializeField] private TextMesh _textMesh = null!;
 
-        private ILocalizableValue _localizableValue;
+        private ILocalizableValue? _localizableValue;
 
         public ILocalizableValue LocalizableValue {
             get => _localizableValue ??= _localizableString;

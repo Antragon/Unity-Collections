@@ -7,8 +7,8 @@
 
     [CustomEditor(typeof(TextProLocalization))]
     public class TextProLocalizationEditor : Editor {
-        private TMP_Text _text;
-        private TextProLocalization _textProLocalization;
+        private TMP_Text _text = null!;
+        private TextProLocalization _textProLocalization = null!;
 
         private void OnEnable() {
             _textProLocalization = (TextProLocalization)target;
