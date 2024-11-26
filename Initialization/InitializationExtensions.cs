@@ -40,6 +40,17 @@
             }
         }
 
+        public static void Initialize<T>(this T instance)
+        where T : ScriptableObject {
+            if (!Application.isPlaying) return;
+            var type = typeof(T);
+            while (type != null && _unityTypes.Contains(type)) {
+                var fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+                fields.Where(MustNotBeNull).ForEach(instance.ValidateNotNull);
+                type = type.BaseType;
+            }
+        }
+
         private static bool MustNotBeNull(FieldInfo fieldInfo) {
             var validatable = fieldInfo.HasAttribute<SerializeField>()
                               || fieldInfo.HasAttribute<FromComponentAttribute>()
