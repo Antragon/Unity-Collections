@@ -1,6 +1,7 @@
 ﻿namespace Collections.Components {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using UnityEngine;
 
     public class ComponentCache {
@@ -12,7 +13,7 @@
 
         public GameObject GameObject { get; }
 
-        public bool TryGet<T>(out T? component) {
+        public bool TryGet<T>([NotNullWhen(true)] out T? component) {
             component = Get<T>();
             return component != null;
         }
