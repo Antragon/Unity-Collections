@@ -37,12 +37,18 @@
             return textAssetAsDictionary;
         }
 
-        public bool HasLocalizedValue(ValueLocalization valueLocalization)
-            => TryGetLocalizedValue(valueLocalization, out _, out _);
+        public IEnumerable<string> GetKeys(string path) {
+            return _texts[path].Keys.AsEnumerable();
+        }
 
-        public bool TryGetLocalizedValue(ValueLocalization valueLocalization, out string localizedValue, out string message) {
+        public bool HasLocalizedValue(ValueLocalization valueLocalization) {
+            var path = valueLocalization.Path;
+            var valueKey = valueLocalization.ValueKey;
+            return _texts.TryGetValue(path, out var values) && values.ContainsKey(valueKey);
+        }
+
+        public bool TryGetLocalizedValue(ValueLocalization valueLocalization, out string localizedValue) {
             localizedValue = string.Empty;
-            message = string.Empty;
 
             var path = valueLocalization.Path;
             var valueKey = valueLocalization.ValueKey;
@@ -54,18 +60,18 @@
             }
             
             if (!_texts.TryGetValue(path, out var values)) {
-                message = $"Path {path} not found";
+                Debug.LogWarning($"Path {path} not found");
                 return false;
             }
 
             if (!values.TryGetValue(valueKey, out var localizedValues)) {
-                message = $"Value {path}.{valueKey} not found";
+                Debug.LogWarning($"Value {path}.{valueKey} not found");
                 return false;
             }
 
             var language = _localizationManager.Language.ToString();
             if (!localizedValues.TryGetValue(language, out localizedValue)) {
-                message = $"{language} localization not found for {path}.{valueKey}";
+                Debug.LogWarning($"{language} localization not found for {path}.{valueKey}");
                 return false;
             }
 

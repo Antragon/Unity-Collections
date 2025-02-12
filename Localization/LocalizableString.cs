@@ -18,12 +18,9 @@
         }
 
         public string GetLocalizedValue(LocalizationRepository localizationRepository) {
-            if (!localizationRepository.TryGetLocalizedValue(new ValueLocalization(Path, ValueKey), out var localizedValue, out var message)) {
-                Debug.LogWarning(message);
-                return DefaultValue();
-            }
-
-            return localizedValue;
+            return !localizationRepository.TryGetLocalizedValue(new ValueLocalization(Path, ValueKey), out var localizedValue)
+                ? DefaultValue()
+                : localizedValue;
         }
 
         private string DefaultValue() => $"{Path}.{ValueKey}";

@@ -1,6 +1,5 @@
 ﻿namespace Collections.Localization {
     using System;
-    using UnityEngine;
 
     public class LocalizableCallbackString : ILocalizableValue {
         private readonly string _path;
@@ -16,12 +15,9 @@
         }
 
         public string GetLocalizedValue(LocalizationRepository localizationRepository) {
-            if (!localizationRepository.TryGetLocalizedValue(new ValueLocalization(_path, _getValueKey()), out var localizedValue, out var message)) {
-                Debug.LogWarning(message);
-                return DefaultValue();
-            }
-
-            return localizedValue;
+            return !localizationRepository.TryGetLocalizedValue(new ValueLocalization(_path, _getValueKey()), out var localizedValue)
+                ? DefaultValue()
+                : localizedValue;
         }
 
         private string DefaultValue() => $"{_path}.{_getValueKey()}";
