@@ -20,7 +20,7 @@
 
             var component = _instances.Values
                 .Select(i => i.GetComponentInChildren(type, true))
-                .FirstOrDefault(c => c != null);
+                .SingleOrDefault(c => c);
 
             if (component) {
                 _cachedComponents[type] = component;
