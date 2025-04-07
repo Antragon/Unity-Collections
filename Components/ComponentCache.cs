@@ -18,6 +18,15 @@
             return component != null;
         }
 
+        public T GetRequired<T>() {
+            var component = Get<T>();
+            if (component == null) {
+                throw new MissingComponentException($"Component {typeof(T)} not found");
+            }
+
+            return (T)component;
+        }
+
         public T? Get<T>() {
             if (!_cache.TryGetValue(typeof(T), out var component)) {
                 component = GameObject.GetComponent<T>();
