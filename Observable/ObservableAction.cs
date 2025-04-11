@@ -6,6 +6,12 @@
         private readonly List<Action<T>> _oneTimeListeners = new();
 
         private event Action<T>? Event;
+        
+        public Observable<T> ReadOnly { get; }
+
+        public ObservableAction() {
+            ReadOnly = new Observable<T>(this);
+        }
 
         public void Invoke(T value) {
             var oneTimeListeners = _oneTimeListeners.ToArray();
@@ -49,6 +55,12 @@
         private readonly List<Action> _oneTimeListeners = new();
 
         private event Action? Event;
+
+        public Observable ReadOnly { get; }
+
+        public ObservableAction() {
+            ReadOnly = new Observable(this);
+        }
 
         public void Invoke() {
             Event?.Invoke();

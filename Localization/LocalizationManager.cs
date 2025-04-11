@@ -10,7 +10,7 @@
 
         [field: SerializeField] public SystemLanguage[] Languages { get; private set; } = null!;
 
-        public Observable OnLocalizationChanged => _onLocalizationChanged.ToReadOnly();
+        public Observable OnLocalizationChanged => _onLocalizationChanged.ReadOnly;
 
         private SystemLanguage? _currentLanguage;
 

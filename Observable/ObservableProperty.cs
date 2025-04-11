@@ -1,6 +1,7 @@
 ﻿namespace Collections.Observable {
     using System;
     using System.Collections.Generic;
+    using Newtonsoft.Json;
 
     [Serializable]
     public class ObservableProperty<T> : IObservableValue<T>, IObservationValueExtender<T> {
@@ -8,8 +9,12 @@
 
         private T? _value;
 
+        [JsonIgnore]
+        public ObservableValue<T> ReadOnly { get; }
+
         public ObservableProperty(T? value = default) {
             Value = value;
+            ReadOnly = new ObservableValue<T>(this);
         }
 
         private event Action<ValueArgs<T>>? Event;

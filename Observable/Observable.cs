@@ -4,7 +4,7 @@
     public class Observable<T> : IObservable<T> {
         private readonly ObservableAction<T> _observableAction;
 
-        public Observable(ObservableAction<T> observableAction) {
+        internal Observable(ObservableAction<T> observableAction) {
             _observableAction = observableAction;
         }
 
@@ -30,7 +30,7 @@
     public class Observable : IObservable {
         private readonly ObservableAction _observableAction;
 
-        public Observable(ObservableAction observableAction) {
+        internal Observable(ObservableAction observableAction) {
             _observableAction = observableAction;
         }
 

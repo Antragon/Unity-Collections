@@ -2,36 +2,36 @@
     using System;
 
     public class ObservableValue<T> : IObservableValue<T> {
-        protected readonly ObservableProperty<T> _observableProperty;
+        private readonly IObservableValue<T> _observableValue;
 
-        public ObservableValue(ObservableProperty<T> observableProperty) {
-            _observableProperty = observableProperty;
+        internal ObservableValue(IObservableValue<T> observableValue) {
+            _observableValue = observableValue;
         }
 
-        public T? Value => _observableProperty.Value;
+        public T? Value => _observableValue.Value;
 
         public ObservableValueCallback<T> AddAndInvokeListener(Action<T?> action) {
-            return _observableProperty.AddAndInvokeListener(action);
+            return _observableValue.AddAndInvokeListener(action);
         }
 
         public ObservableValueCallback<T> AddAndInvokeChangeListener(Action<ValueArgs<T>> action) {
-            return _observableProperty.AddAndInvokeChangeListener(action);
+            return _observableValue.AddAndInvokeChangeListener(action);
         }
 
         public ObservableValueCallback<T> AddListener(Action<T?> action) {
-            return _observableProperty.AddListener(action);
+            return _observableValue.AddListener(action);
         }
 
         public ObservableValueCallback<T> AddChangeListener(Action<ValueArgs<T>> action) {
-            return _observableProperty.AddChangeListener(action);
+            return _observableValue.AddChangeListener(action);
         }
 
         public ObservableValueCallback<T> ListenOnce(Action<T?> action) {
-            return _observableProperty.ListenOnce(action);
+            return _observableValue.ListenOnce(action);
         }
 
         public ObservableValueCallback<T> ListenToChangeOnce(Action<ValueArgs<T>> action) {
-            return _observableProperty.ListenToChangeOnce(action);
+            return _observableValue.ListenToChangeOnce(action);
         }
 
         public override string ToString() {
