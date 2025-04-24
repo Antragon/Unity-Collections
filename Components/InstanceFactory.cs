@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Initialization;
+    using MoreLinq;
     using UnityEngine;
     using Object = UnityEngine.Object;
 
@@ -36,6 +37,7 @@
             if (_instanceStorage.TryGetValue(prefab, out var instances)) {
                 count -= instances.Count;
                 count = Mathf.Max(count, 0);
+                instances.ForEach(i => i.transform.SetParent(parent));
             }
 
             var callbacks = Enumerable.Range(0, count)
