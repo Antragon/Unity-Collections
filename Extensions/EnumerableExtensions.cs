@@ -1,4 +1,5 @@
 ﻿namespace Collections.Extensions {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -14,6 +15,13 @@
         public static T Random<T>(this IList<T> enumerable) {
             var index = UnityEngine.Random.Range(0, enumerable.Count);
             return enumerable[index];
+        }
+        
+        public static IEnumerable<T> Do<T>(this IEnumerable<T> enumerable, Action<T> action) {
+            foreach (var item in enumerable) {
+                action(item);
+                yield return item;
+            }
         }
     }
 }
