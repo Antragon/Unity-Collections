@@ -16,13 +16,15 @@
         [SerializeField] private float _maximum;
         [SerializeField, Range(0, 10)] private int _decimalPlaces = 1;
 
+        private int DecimalPlacesConversionValue => (int)Mathf.Pow(10, _decimalPlaces);
+
+        public Observable<float> OnEditingEnded => _onEditingEnded.ReadOnly;
+        public Observable<float> OnValueChanged => _onValueChanged.ReadOnly;
+
         public float Value {
             get => float.Parse(_inputField.text);
             set => _inputField.text = value.ToString(CultureInfo.CurrentCulture);
         }
-
-        public Observable<float> OnEditingEnded => _onEditingEnded.ReadOnly;
-        public Observable<float> OnValueChanged => _onValueChanged.ReadOnly;
 
         private void Awake() {
             this.Initialize();
@@ -39,8 +41,6 @@
             _onValueChanged.Invoke(valueAsFloat);
         }
 
-        private int DecimalPlacesConversionValue => (int)Mathf.Pow(10, _decimalPlaces);
-
         private void OnEndEdit(string value) {
             if (!float.TryParse(value, out var valueAsFloat)) {
                 valueAsFloat = _minimum;
@@ -48,6 +48,10 @@
             }
 
             _onEditingEnded.Invoke(valueAsFloat);
+        }
+
+        public void SetMinimum(float minimum) {
+            _minimum = minimum;
         }
     }
 }
