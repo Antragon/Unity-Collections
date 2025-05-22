@@ -1,5 +1,6 @@
 ﻿namespace Collections {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
@@ -30,7 +31,7 @@
             }
         }
 
-        public static bool TryLoadJson<T>(string loadPath, out T? @object) {
+        public static bool TryLoadJson<T>(string loadPath, [NotNullWhen(true)] out T? @object) {
             @object = default;
 
             try {
