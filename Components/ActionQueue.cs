@@ -19,7 +19,7 @@
         private IEnumerator ProcessQueue() {
             while (enabled) {
                 for (var i = 0; i < _actionsPerFrame; i++) {
-                    if (!_queue.Any()) break;
+                    if (_queue.Count == 0) break;
                     ProcessNext();
                 }
 

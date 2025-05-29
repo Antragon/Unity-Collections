@@ -1,6 +1,5 @@
 ﻿namespace Collections.Components {
     using System.Collections.Generic;
-    using System.Linq;
     using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
     using UnityEngine.InputSystem;
@@ -44,7 +43,7 @@
         }
 
         private void UpdateTimeScale() {
-            Time.timeScale = _timeStoppers.Any() ? 0 : _timeScaleDefault * TimeScaleMultiplier;
+            Time.timeScale = _timeStoppers.Count > 0 ? 0 : _timeScaleDefault * TimeScaleMultiplier;
         }
 
         private void Update() {

@@ -9,7 +9,7 @@
 
         static OptionsRepository() {
             if (DataSaver.TryLoadJson<Dictionary<string, object>>(_savePath, out var options)) {
-                _options = options!;
+                _options = options;
             }
         }
 

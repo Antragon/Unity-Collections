@@ -1,5 +1,4 @@
 ﻿namespace Collections.Initialization {
-    using System.Linq;
     using System.Reflection;
     using UnityEngine;
 
@@ -10,7 +9,7 @@
         }
 
         public static void SetComponentValue<TComponent>(this object instance, FieldInfo field, TComponent[] values) {
-            if (field.GetValue(instance) is TComponent[] existing && existing.Any()) return;
+            if (field.GetValue(instance) is TComponent[] { Length: > 0 }) return;
             field.SetValue(instance, values);
         }
     }
