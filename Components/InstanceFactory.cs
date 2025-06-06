@@ -66,6 +66,8 @@
         private GameObject CreateInstanceInternal(GameObject prefab, Transform? parent) {
             var instance = Instantiate(prefab, parent);
             instance.name = prefab.name;
+            var instanceInfo = instance.AddComponent<InstanceInfo>();
+            instanceInfo.Creator = this;
             _instancePrefabs.Add(instance, prefab);
             return instance;
         }
