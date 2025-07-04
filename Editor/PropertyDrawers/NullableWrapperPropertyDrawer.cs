@@ -1,4 +1,5 @@
 ﻿namespace Collections.Editor.PropertyDrawers {
+    using Extensions;
     using Nullables;
     using UnityEditor;
     using UnityEngine;
@@ -7,7 +8,7 @@
         protected virtual float Height => 18;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
-            var hasValueProperty = GetProperty(property, nameof(INullableWrapper<object>.HasValue));
+            var hasValueProperty = property.GetProperty(nameof(INullableWrapper<object>.HasValue));
             return hasValueProperty.boolValue ? Height : base.GetPropertyHeight(property, label);
         }
 
@@ -32,7 +33,7 @@
             var rect = position;
             rect.width = 16;
             rect.height = 16;
-            var hasValueProperty = GetProperty(property, nameof(INullableWrapper<object>.HasValue));
+            var hasValueProperty = property.GetProperty(nameof(INullableWrapper<object>.HasValue));
             EditorGUI.PropertyField(rect, hasValueProperty, GUIContent.none);
             return hasValueProperty;
         }
@@ -41,12 +42,8 @@
             var rect = position;
             rect.x += 22;
             rect.width -= 22;
-            var valueProperty = GetProperty(property, nameof(INullableWrapper<object>.Value));
+            var valueProperty = property.GetProperty(nameof(INullableWrapper<object>.Value));
             EditorGUI.PropertyField(rect, valueProperty, GUIContent.none);
-        }
-
-        private static SerializedProperty GetProperty(SerializedProperty property, string childPropertyName) {
-            return property.FindPropertyRelative($"<{childPropertyName}>k__BackingField");
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿namespace Collections.Editor.PropertyDrawers {
     using Collections.Localization;
+    using Extensions;
     using UnityEditor;
     using UnityEngine;
 
@@ -28,7 +29,7 @@
 
         private void DrawPath() {
             var rect = _rect;
-            var property = GetProperty(_pathName);
+            var property = _property.GetProperty(_pathName);
             var guiStyle = new GUIStyle(GUI.skin.textField);
             guiStyle.CalcMinMaxWidth(new GUIContent(property.stringValue), out var min, out _);
             rect.width = Mathf.Max(min, 16);
@@ -47,12 +48,8 @@
 
         private void DrawValueKey() {
             var rect = _rect;
-            var property = GetProperty(_valueKeyName);
+            var property = _property.GetProperty(_valueKeyName);
             EditorGUI.PropertyField(rect, property, GUIContent.none);
-        }
-
-        private SerializedProperty GetProperty(string childPropertyName) {
-            return _property.FindPropertyRelative($"<{childPropertyName}>k__BackingField");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace Collections.Editor.PropertyDrawers {
     using System;
+    using Extensions;
     using Ranges;
     using UnityEditor;
     using UnityEngine;
@@ -25,7 +26,7 @@
         }
 
         private void DrawStart() {
-            var property = GetProperty(_startName);
+            var property = _property.GetProperty(_startName);
 
             var labelRect = _layout.Get(0, 1);
             EditorGUI.LabelField(labelRect, ObjectNames.NicifyVariableName(_startName));
@@ -35,17 +36,13 @@
         }
 
         private void DrawEnd() {
-            var property = GetProperty(_endName);
+            var property = _property.GetProperty(_endName);
 
             var labelRect = _layout.Get(2, 1);
             EditorGUI.LabelField(labelRect, ObjectNames.NicifyVariableName(_endName));
 
             var valueRect = _layout.Get(3, 1);
             EditorGUI.PropertyField(valueRect, property, GUIContent.none);
-        }
-
-        private SerializedProperty GetProperty(string childPropertyName) {
-            return _property.FindPropertyRelative($"<{childPropertyName}>k__BackingField");
         }
     }
 

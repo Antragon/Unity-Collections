@@ -6,7 +6,7 @@
 
     [Serializable]
     public struct IntRange : IRange<int> {
-        public IntRange(int start = default, int end = default) {
+        public IntRange(int start = 0, int end = 0) {
             Start = start;
             End = end;
         }

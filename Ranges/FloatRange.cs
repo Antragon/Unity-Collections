@@ -5,7 +5,7 @@
 
     [Serializable]
     public struct FloatRange : IRange<float> {
-        public FloatRange(float start = default, float end = default) {
+        public FloatRange(float start = 0, float end = 0) {
             Start = start;
             End = end;
         }
