@@ -21,7 +21,7 @@
         }
 
         public static implicit operator NullableIntWrapper(int? value) {
-            var wrapper = new NullableIntWrapper { Value = value ?? default, HasValue = value.HasValue };
+            var wrapper = new NullableIntWrapper { Value = value ?? 0, HasValue = value.HasValue };
             return wrapper;
         }
     }

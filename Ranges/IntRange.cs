@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
+    using Random = UnityEngine.Random;
 
     [Serializable]
     public struct IntRange : IRange<int> {
@@ -13,6 +14,8 @@
 
         [field: SerializeField] public int Start { get; private set; }
         [field: SerializeField] public int End { get; private set; }
+
+        public int GetRandomIncludingMax() => Random.Range(Start, End + 1);
 
         public IEnumerable<int> All => Enumerable.Range(Start, End - Start + 1);
 
