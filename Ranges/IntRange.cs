@@ -11,13 +11,16 @@
             Start = start;
             End = end;
         }
+        
+        private int Min => Mathf.Min(Start, End);
+        private int Max => Mathf.Min(Start, End);
 
         [field: SerializeField] public int Start { get; private set; }
         [field: SerializeField] public int End { get; private set; }
 
-        public int GetRandomIncludingMax() => Random.Range(Start, End + 1);
+        public int GetRandomIncludingMax() => Random.Range(Min, Max + 1);
 
-        public IEnumerable<int> All => Enumerable.Range(Start, End - Start + 1);
+        public IEnumerable<int> All => Enumerable.Range(Min, Max - Min + 1);
 
         public override string ToString() {
             return $"{Start} - {End}";
