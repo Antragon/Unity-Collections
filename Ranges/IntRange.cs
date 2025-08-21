@@ -11,9 +11,9 @@
             Start = start;
             End = end;
         }
-        
+
         private int Min => Mathf.Min(Start, End);
-        private int Max => Mathf.Min(Start, End);
+        private int Max => Mathf.Max(Start, End);
 
         [field: SerializeField] public int Start { get; private set; }
         [field: SerializeField] public int End { get; private set; }
