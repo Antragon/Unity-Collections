@@ -8,26 +8,24 @@
 
     public class DecimalInputField : MonoBehaviour {
         private readonly ObservableAction<float> _onEditingEnded = new();
-        private readonly ObservableAction<float> _onValueChanged = new();
+        private readonly ObservableProperty<float> _number = new();
 
         [FromComponent] private readonly InputField _inputField = null!;
 
         [SerializeField] private float _minimum;
         [SerializeField] private float _maximum;
         [SerializeField, Range(0, 10)] private int _decimalPlaces = 1;
+        [SerializeField] private string? _format;
 
         private int DecimalPlacesConversionValue => (int)Mathf.Pow(10, _decimalPlaces);
 
         public Observable<float> OnEditingEnded => _onEditingEnded.ReadOnly;
-        public Observable<float> OnValueChanged => _onValueChanged.ReadOnly;
 
-        public float Value {
-            get => float.Parse(_inputField.text);
-            set => _inputField.text = value.ToString(CultureInfo.CurrentCulture);
-        }
+        public ObservableValue<float> Number => _number.ReadOnly;
 
         private void Awake() {
             this.Initialize();
+            Number.AddAndInvokeListener(value => _inputField.text = value.ToString(_format, CultureInfo.CurrentCulture));
             _inputField.contentType = InputField.ContentType.DecimalNumber;
             _inputField.onValueChanged.AddListener(OnValueChanging);
             _inputField.onEndEdit.AddListener(OnEndEdit);
@@ -35,19 +33,27 @@
 
         private void OnValueChanging(string value) {
             if (!char.IsDigit(value.LastOrDefault()) || !float.TryParse(value, out var valueAsFloat)) return;
-            valueAsFloat = Mathf.Clamp(valueAsFloat, _minimum, _maximum);
-            valueAsFloat = Mathf.Floor(valueAsFloat * DecimalPlacesConversionValue) / DecimalPlacesConversionValue;
-            Value = valueAsFloat;
-            _onValueChanged.Invoke(valueAsFloat);
+            Set(valueAsFloat);
         }
 
         private void OnEndEdit(string value) {
             if (!float.TryParse(value, out var valueAsFloat)) {
                 valueAsFloat = _minimum;
-                Value = _minimum;
+                _number.Value = _minimum;
             }
 
             _onEditingEnded.Invoke(valueAsFloat);
+        }
+
+        public void Increment(float increment) {
+            Set(_number.Value + increment);
+        }
+
+        public void Set(float value) {
+            value = Mathf.Clamp(value, _minimum, _maximum);
+            value = Mathf.Floor(value * DecimalPlacesConversionValue) / DecimalPlacesConversionValue;
+            _inputField.SetTextWithoutNotify(value.ToString(_format, CultureInfo.CurrentCulture));
+            _number.Value = value;
         }
 
         public void SetMinimum(float minimum) {
