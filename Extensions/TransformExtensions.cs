@@ -28,8 +28,12 @@
             yield return start.SmoothLerpTowards(target, speed, transform.SetPosition2D, breakCondition, unscaledTime);
         }
 
-        public static void SetPosition2D(this Transform transform, Vector2 position2D) {
-            var position = new Vector3(position2D.x, position2D.y, transform.position.z);
+        public static void SetPosition2D(this Transform transform, Vector2 position) {
+            transform.SetPosition2D(position.x, position.y);
+        }
+
+        public static void SetPosition2D(this Transform transform, float x, float y) {
+            var position = new Vector3(x, y, transform.position.z);
             transform.position = position;
         }
 
@@ -51,8 +55,12 @@
             transform.rotation = Quaternion.Euler(angles);
         }
 
-        public static void SetLocalPosition2D(this Transform transform, Vector2 position2D) {
-            var position = new Vector3(position2D.x, position2D.y, transform.localPosition.z);
+        public static void SetLocalPosition2D(this Transform transform, Vector2 position) {
+            transform.SetLocalPosition2D(position.x, position.y);
+        }
+
+        public static void SetLocalPosition2D(this Transform transform, float x, float y) {
+            var position = new Vector3(x, y, transform.localPosition.z);
             transform.localPosition = position;
         }
 
