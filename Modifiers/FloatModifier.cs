@@ -1,6 +1,6 @@
 ﻿namespace Collections.Modifiers {
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Diagnostics.CodeAnalysis;
 
     public class FloatModifier : Dictionary<object, float> {
         private readonly float _defaultValue;
@@ -9,6 +9,17 @@
             _defaultValue = defaultValue;
         }
 
-        public float Value => Count > 0 ? Values.Aggregate((x, y) => x * y) : _defaultValue;
+        public float Value {
+            [SuppressMessage("ReSharper", "ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator", Justification = "Allocation-free code")]
+            get {
+                if (Count == 0) return _defaultValue;
+                var result = 1f;
+                foreach (var value in Values) {
+                    result *= value;
+                }
+
+                return result;
+            }
+        }
     }
 }
