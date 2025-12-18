@@ -20,6 +20,7 @@
 
             var component = _instances.Values
                 .Select(i => i.GetComponentInChildren(type, true))
+                .Distinct()
                 .SingleOrDefault(c => c);
 
             if (component) {
