@@ -42,9 +42,9 @@
             return new Vector2(xValue, yValue);
         }
 
-        public static bool IsOrthogonal(this Vector2 value) {
-            var orthogonal = value.x == 0 || value.y == 0;
-            return orthogonal;
+        public static bool IsCardinal(this Vector2 value) {
+            var cardinal = value.x == 0 || value.y == 0;
+            return cardinal;
         }
     }
 }
