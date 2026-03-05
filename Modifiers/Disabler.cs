@@ -1,25 +1,23 @@
 ﻿namespace Collections.Modifiers {
-    using System;
     using System.Collections.Generic;
     using Extensions;
-    using MoreLinq;
+    using Observable;
     using UnityEngine;
 
     public class Disabler {
-        private readonly Action<bool> _setEnable;
         private readonly HashSet<object> _disableSources = new();
+        private readonly List<Behaviour> _behaviours = new();
+        private readonly List<GameObject> _gameObjects = new();
+        private readonly ObservableProperty<bool> _hasDisableSources;
 
-        public Disabler(params Behaviour[] behaviours) {
-            _setEnable = value => behaviours.ForEach(b => b.Enable(value));
+        public Disabler() {
+            _hasDisableSources = new ObservableProperty<bool>();
+            _hasDisableSources
+                .AddListener(value => _behaviours.ForEach(b => b.Enable(!value)))
+                .AddListener(value => _gameObjects.ForEach(b => b.SetActive(!value)));
         }
 
-        public Disabler(params GameObject[] gameObjects) {
-            _setEnable = value => gameObjects.ForEach(b => b.SetActive(value));
-        }
-
-        public Disabler(Action<bool> setEnable) {
-            _setEnable = setEnable;
-        }
+        public ObservableValue<bool> HasDisableSources => _hasDisableSources.ReadOnly;
 
         public void Set(bool value, object source) {
             if (value) {
@@ -28,7 +26,19 @@
                 _disableSources.Remove(source);
             }
 
-            _setEnable(_disableSources.Count == 0);
+            _hasDisableSources.Value = _disableSources.Count > 0;
+        }
+
+        public static Disabler Create(params Behaviour[] behaviours) {
+            var disabler = new Disabler();
+            disabler._behaviours.AddRange(behaviours);
+            return disabler;
+        }
+
+        public static Disabler Create(params GameObject[] gameObjects) {
+            var disabler = new Disabler();
+            disabler._gameObjects.AddRange(gameObjects);
+            return disabler;
         }
     }
 }
