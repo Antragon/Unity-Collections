@@ -7,14 +7,15 @@
     public class Disabler {
         private readonly HashSet<object> _disableSources = new();
         private readonly List<Behaviour> _behaviours = new();
+        private readonly List<Renderer> _renderers = new();
         private readonly List<GameObject> _gameObjects = new();
-        private readonly ObservableProperty<bool> _hasDisableSources;
+        private readonly ObservableProperty<bool> _hasDisableSources = new();
 
         public Disabler() {
-            _hasDisableSources = new ObservableProperty<bool>();
             _hasDisableSources
                 .AddListener(value => _behaviours.ForEach(b => b.Enable(!value)))
-                .AddListener(value => _gameObjects.ForEach(b => b.SetActive(!value)));
+                .AddListener(value => _renderers.ForEach(r => r.Enable(!value)))
+                .AddListener(value => _gameObjects.ForEach(g => g.SetActive(!value)));
         }
 
         public ObservableValue<bool> HasDisableSources => _hasDisableSources.ReadOnly;
@@ -26,12 +27,19 @@
                 _disableSources.Remove(source);
             }
 
+
             _hasDisableSources.Value = _disableSources.Count > 0;
         }
 
         public static Disabler Create(params Behaviour[] behaviours) {
             var disabler = new Disabler();
             disabler._behaviours.AddRange(behaviours);
+            return disabler;
+        }
+
+        public static Disabler Create(params Renderer[] renderers) {
+            var disabler = new Disabler();
+            disabler._renderers.AddRange(renderers);
             return disabler;
         }
 
